@@ -5,3 +5,6 @@
 .idea/
 .idea/workspace.xml
 **/.idea/workspace.xml
+
+*.sublime-workspace
+*.sublime-project
