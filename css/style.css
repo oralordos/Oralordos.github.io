@@ -1,23 +1,26 @@
+/* Global Styling */
+
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'courier new', courier, sans-serif;
     font-style: normal;
 	font-variant: normal;
+    font-weight: 500;
+    color: #555;
 }
 
 h1 {
 	font-size: 36px;
-	font-weight: 500;
 	line-height: 1.2em;
 }
 h2 {
 	font-size: 21px;
-	font-weight: 500;
 	line-height: 1.2em;
 }
 p {
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: 400;
 	line-height: 20px;
+    margin-bottom: 20px;
 }
 blockquote {
 	font-size: 21px;
@@ -30,11 +33,26 @@ pre {
 	line-height: 18.5714282989502px;
 }
 
+section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+a {
+    text-decoration: none;
+    color: #2ec371;
+}
+
+/* Top Section Styling */
+
 #top {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
     background-color: #cbd0d3;
     padding-top: 100px;
     padding-bottom: 100px;
+    background: url('../images/hero-bg-dark.jpg') no-repeat center center;
+    background-size: cover;
 }
 
 #top h1 {
@@ -44,4 +62,27 @@ pre {
 
 #top h2 {
     color: #cecece;
+    font-weight: 200;
+}
+
+.skinny {
+    font-weight: 100;
+    color: #fefefe;
+}
+
+/* Body Styling */
+
+.container {
+    width: 970px;
+    margin: 0px auto;
+}
+
+#ryan-image {
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
+
+.container:after {
+    clear: both;
 }
