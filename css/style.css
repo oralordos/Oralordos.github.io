@@ -22,9 +22,12 @@ nav p {
     padding: 0.3em 0em 0em 0.4em;
 }
 
+nav ul {
+    float: right
+}
+
 nav li {
     display: inline-block;
-    float: right;
 }
 
 .btn {
@@ -93,7 +96,7 @@ nav li {
 }
 
 .clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
