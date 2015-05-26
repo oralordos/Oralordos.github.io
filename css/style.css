@@ -86,3 +86,35 @@ a {
 .container:after {
     clear: both;
 }
+
+/* Bottom Styling */
+
+#bottom {
+    background-color: #ccc;
+}
+
+#bottom h3 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;
+    font-weight: 600;
+    font-size: 32px;
+}
+
+.one-half {
+    background-color: #fefefe;
+    width: 50%;
+    float: left;
+}
+
+/* clearfix */
+.row:before,
+.row:after {
+    content: "";
+    display: table;
+} 
+.row:after {
+    clear: both;
+}
+.row {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
