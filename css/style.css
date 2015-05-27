@@ -81,6 +81,8 @@ nav li {
 }
 
 #reading article {
+    display: inline-block;
+    width: 49%;
     border: 0.1em solid #b1b1ff;
     margin: 0.4em 0;
 }
@@ -89,10 +91,7 @@ nav li {
     margin: 0 auto;
     max-width: 1000px;
     width: 80%;
-}
-
-#to-top a {
-    float: right;
+    min-width: 400px;
 }
 
 .clearfix:after {
