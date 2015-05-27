@@ -5,7 +5,7 @@
 }
 
 h1 {
-    font-family: font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
 }
 
 h1 {
@@ -19,7 +19,7 @@ h2 {
 nav p {
     float: left;
     font-size: 1.3em;
-    padding: 0.3em 0em 0em 0.4em;
+    padding: 0.3em 0 0 0.4em;
 }
 
 nav ul {
@@ -49,7 +49,7 @@ nav li {
     text-align: center;
     background: url('../images/code-113611_1280.jpg') no-repeat center center;
     background-size: cover;
-    padding: 4em 0px;
+    padding: 4em 0;
 }
 
 .top img {
@@ -82,11 +82,11 @@ nav li {
 
 #reading article {
     border: 0.1em solid #b1b1ff;
-    margin: 0.4em 0em;
+    margin: 0.4em 0;
 }
 
 .container {
-    margin: 0px auto;
+    margin: 0 auto;
     max-width: 1000px;
     width: 80%;
 }
