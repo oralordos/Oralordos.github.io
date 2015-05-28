@@ -93,13 +93,28 @@ nav li {
 
 .container {
 	margin: 0 auto;
-	max-width: 1000px;
-	width: 80%;
-	min-width: 400px;
+	width: 900px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 98%;
+        min-width: 300px;
+    }
 }
 
 .projects {
-	background-color: #88e;
+	background-color: #ddf;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -moz-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    -o-flex-flow: row wrap;
+    flex-flow: row wrap;
 }
 
 .projects a {
@@ -110,7 +125,7 @@ nav li {
 	display: inline-block;
 	width: 33.333%;
 	vertical-align: top;
-	border-radius: 1em;
+	border-radius: 10px;
 	background-color: #eef;
 	text-align: center;
 	border: 1px solid #77e;
@@ -118,15 +133,15 @@ nav li {
 
 .projects article img {
 	width: 100%;
-	height: em;
-	border-top-left-radius: 1em;
-	border-top-right-radius: 1em;
-	margin-bottom: 0.5em;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin-bottom: 8px;
 }
 
 .projects article p {
-	margin-top: 0.5em;
-	font-size: 0.9em;
+    /* TODO: Find a way to disable changing the size based on the paragraph text. */
+	margin-top: 3px;
+	font-size: 16px;
 }
 
 .clearfix:after {
