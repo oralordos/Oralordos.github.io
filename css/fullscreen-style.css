@@ -120,10 +120,11 @@ h6 {
 }
 
 article p {
-    font-size: 17px;
+    font-size: 19px;
     line-height: 30px;
     margin-bottom: 22px;
     letter-spacing: 0.1px;
+    font-family: 'Homemade Apple', cursive;
 }
 
 article li {
