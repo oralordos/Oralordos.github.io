@@ -8,3 +8,6 @@
 
 *.sublime-workspace
 *.sublime-project
+
+# node.js
+node_modules/
