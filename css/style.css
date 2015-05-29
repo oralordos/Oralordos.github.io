@@ -2,6 +2,10 @@
 	box-sizing: border-box;
 }
 
+body {
+	margin-top: 30px;
+}
+
 h1, h2, h3, h4 {
 	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
 }
@@ -18,18 +22,74 @@ h4 {
 	font-size: 1.2em;
 }
 
+nav {
+	height: 30px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 999;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	background: #fff;
+}
+
 nav p {
-	float: left;
-	font-size: 1.3em;
-	padding: 0.3em 0 0 0.4em;
+	font-size: 20px;
+	margin-left: 10px;
 }
 
-nav ul {
-	float: right
+.dropdown {
+	position: relative;
+	padding: 7px 10px;
 }
 
-nav li {
-	display: inline-block;
+.dropdown:hover {
+	background-color: #ccc;
+}
+
+.dropdown ul {
+	visibility: hidden;
+	position: absolute;
+	z-index: -1;
+	top: 100%;
+	right: 0;
+}
+
+.dropdown:hover ul {
+	visibility: visible;
+	animation: slide-down 350ms;
+}
+
+@keyframes slide-down {
+	0% {
+		transform: translateX(35%) translateY(-75%) scale(0);
+	}
+	100% {
+		transform: translateX(0%) translateY(0%) scale(1);
+	}
+}
+
+.dropdown:hover ul li a:hover {
+	background-color: #ccc;
+}
+
+.dropdown ul li a {
+	display: block;
+	padding: 6px;
+	background: #eee;
+	color: #000075;
+	text-decoration: none;
+}
+
+.dropdown ul li {
+	border-top: 1px solid #ddd;
+}
+
+.dropdown ul li:first-child {
+	border-top-width: 0;
 }
 
 .btn {
@@ -126,13 +186,11 @@ nav li {
 }
 
 .projects article {
-	display: inline-block;
-	width: 33.333%;
-	vertical-align: top;
 	border-radius: 10px;
 	background-color: #eef;
 	text-align: center;
 	border: 1px solid #77e;
+	max-width: 300px;
 }
 
 .projects article img {
@@ -146,10 +204,4 @@ nav li {
     /* TODO: Find a way to disable changing the size based on the paragraph text. */
 	margin-top: 3px;
 	font-size: 16px;
-}
-
-.clearfix:after {
-	content: "";
-	display: table;
-	clear: both;
 }
