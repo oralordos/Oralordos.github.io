@@ -238,7 +238,6 @@ nav p {
 }
 
 .projects article p {
-    /* TODO: Find a way to disable changing the size based on the paragraph text. */
 	margin-top: 3px;
 	font-size: 16px;
 }
