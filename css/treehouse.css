@@ -66,15 +66,28 @@ nav ul li ul {
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
     flex-direction: column;
-    -webkit-justify-content: space-around;
-    justify-content: space-around;
-    /*position: absolute;*/
-    /*top: 100px;*/
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: auto;
+    height: auto;
+    /*overflow: hidden;*/
+    /*max-height: 0;*/
+}
+
+nav ul li ul li {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 nav ul li ul li a {
+    box-sizing: content-box;
     background-color: #5E740B;
     color: #fefefe;
+    padding: 20px 10px;
+    width: 100%;
+    height: 100%;
 }
 
 nav ul li:hover ul {
