@@ -19,7 +19,7 @@ h2 {
 }
 
 h4 {
-    font-size: 1.2em;
+    font-size: 23px;
 }
 
 #nav {
@@ -217,13 +217,14 @@ h4 {
     -webkit-flex-flow: row wrap;
     flex-flow: row wrap;
     -webkit-justify-content: space-around;
-    /*noinspection CssInvalidPropertyValue*/
     justify-content: space-around;
+    /*align-items: flex-start;*/
 }
 
 .projects a {
-    color: #000000;
+    color: #000;
     text-decoration: none;
+    position: relative;
 }
 
 .projects article {
@@ -232,16 +233,34 @@ h4 {
     text-align: center;
     border: 1px solid #77e;
     max-width: 300px;
+    -webkit-flex-basis: 300px;
+    flex-basis: 300px;
 }
 
 .projects article img {
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .projects article p {
-    margin-top: 3px;
+    margin-top: 10px;
     font-size: 16px;
+    line-height: 1.3em;
+}
+
+.projects a .popup-item {
+    /*position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    background-color: rgba(100, 100, 100, 0.85);
+    /!*max-height: 0;*!/
+    overflow: hidden;
+    transition: max-height 2s ease;*/
+}
+
+.projects a:hover .popup-item {
+    /*max-height: 500px;*/
 }
