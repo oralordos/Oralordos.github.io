@@ -33,7 +33,6 @@ nav {
 	flex-flow: row nowrap;
 	justify-content: space-between;
 	align-items: center;
-	background: #fff;
 }
 
 nav p {
@@ -51,24 +50,30 @@ nav p {
 }
 
 .dropdown ul {
-	visibility: hidden;
 	position: absolute;
-	z-index: -1;
 	top: 100%;
 	right: 0;
+	visibility: hidden;
 }
 
 .dropdown:hover ul {
+	opacity: 1;
 	visibility: visible;
-	animation: slide-down 350ms;
+	animation: slide-down 0.4s linear;
 }
 
 @keyframes slide-down {
 	0% {
-		transform: translateX(35%) translateY(-75%) scale(0);
+		transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
+	}
+	45% {
+		transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
+	}
+	70% {
+		transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
 	}
 	100% {
-		transform: translateX(0%) translateY(0%) scale(1);
+		transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
 	}
 }
 
