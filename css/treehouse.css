@@ -3,30 +3,41 @@
 }
 
 header {
-    width: 85%;
-    min-width: 1000px;
+    max-width: 1000px;
     margin: 0 auto;
     /*background: #fafafa;*/
     height: 85px;
 }
 
+header nav {
+    display: flex;
+    justify-content: space-between;
+}
+
 header nav > a {
-    color: #52c452;
+    color: rgba(102, 206, 102, 0.7);
     float: left;
     font-size: 25px;
-    margin: 30px 15px;
+    margin: 30px 3px;
     text-decoration: none;
     font-family: 'Share', cursive;
 }
 
+header nav > a:hover {
+    color: rgba(102, 206, 102, 1);
+}
+
 header ul {
     font-size: 20px;
-    float: right;
+    display: flex;
 }
 
 header ul li {
-    float: left;
     margin: 30px 15px;
+}
+
+header ul li:last-child {
+    margin-right: 3px;
 }
 
 header ul li a {
@@ -34,29 +45,14 @@ header ul li a {
     text-decoration: none;
 }
 
-.green {
-    color: #71f164;
+header ul li a:hover {
+    color: rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 1000px) {
-    header {
-        min-width: 100px;
-        max-width: none;
-        width: 100%;
-    }
-
-    header nav > a {
-        margin-left: 3px;
-        margin-right: 3px;
-    }
-
-    header ul li:last-child {
-        margin-right: 3px;
-    }
+header ul li:last-child a {
+    color: rgba(102, 206, 102, 0.7);
 }
 
-header:after {
-    content: "";
-    display: table;
-    clear: both;
+header ul li:last-child a:hover {
+    color: rgba(102, 206, 102, 1);
 }

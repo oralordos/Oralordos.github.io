@@ -159,6 +159,7 @@ nav p {
 .top h1, .top h2 {
 	color: #fff;
 	font-weight: 600;
+	text-shadow: black;
 }
 
 #body {
@@ -213,7 +214,8 @@ nav p {
         -ms-flex-flow: row wrap;
             flex-flow: row wrap;
     -webkit-justify-content: space-around;
-        -ms-flex-pack: distribute;
+	/*noinspection CssInvalidPropertyValue*/
+	-ms-flex-pack: distribute;
             justify-content: space-around;
 }
 
