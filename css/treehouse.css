@@ -12,13 +12,13 @@ header {
     /*background: #fafafa;*/
     height: 85px;
     display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
+            -webkit-box-pack: justify;
             justify-content: space-between;
     -webkit-align-items: center;
-        -ms-flex-align: center;
+            -webkit-box-align: center;
             align-items: center;
     font-family: sans-serif;
 }
@@ -44,10 +44,10 @@ nav ul {
     font-size: 15px;
     font-weight: 500;
     display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -webkit-align-items: center;
-        -ms-flex-align: center;
+            -webkit-box-align: center;
             align-items: center;
     height: 100%;
 }
@@ -60,13 +60,13 @@ nav ul li a {
     color: rgba(0, 0, 0, 0.3);
     text-decoration: none;
     display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -webkit-justify-content: center;
-        -ms-flex-pack: center;
+            -webkit-box-pack: center;
             justify-content: center;
     -webkit-align-items: center;
-        -ms-flex-align: center;
+            -webkit-box-align: center;
             align-items: center;
     padding: 0 15px;
     height: 100%;
@@ -88,7 +88,8 @@ nav ul li a:hover {
 
     .container {
         -webkit-flex-direction: column;
-            -ms-flex-direction: column;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
                 flex-direction: column;
         max-width: none;
         margin: 0;
@@ -105,7 +106,8 @@ nav ul li a:hover {
 
     nav ul {
         -webkit-flex-direction: column;
-            -ms-flex-direction: column;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
                 flex-direction: column;
         width: 100%;
     }

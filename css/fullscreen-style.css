@@ -28,10 +28,10 @@ header nav {
 
 .header-flex {
     display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -webkit-align-items: center;
-    -ms-flex-align: center;
+    -webkit-box-align: center;
     align-items: center;
     height: 100%;
     text-align: center;
@@ -40,6 +40,7 @@ header nav {
 .header-flex li {
     -webkit-flex-grow: 1;
     -ms-flex-positive: 1;
+    -webkit-box-flex: 1;
     flex-grow: 1;
     border: 1px solid #111;
     border-top-width: 0;
@@ -56,19 +57,19 @@ header nav {
     width: 100%;
     color: #444;
     display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -webkit-align-items: center;
-    -ms-flex-align: center;
+    -webkit-box-align: center;
     align-items: center;
     -webkit-justify-content: center;
-    -ms-flex-pack: center;
+    -webkit-box-pack: center;
     justify-content: center;
 }
 
 #example {
     -webkit-flex: 0 1 426px;
-    -ms-flex: 0 1 426px;
+    -webkit-box-flex: 0;
     flex: 0 1 426px;
 }
 
@@ -123,6 +124,7 @@ article p {
     font-size: 19px;
     line-height: 30px;
     margin-bottom: 22px;
+    /*noinspection CssFloatPxLength*/
     letter-spacing: 0.1px;
     font-family: 'Homemade Apple', cursive;
 }
@@ -153,7 +155,7 @@ article li {
 
     #example {
         -webkit-flex: 0 1 276px;
-            -ms-flex: 0 1 276px;
+                -webkit-box-flex: 0;
                 flex: 0 1 276px;
     }
 }
@@ -169,7 +171,7 @@ article li {
 
     #example {
         -webkit-flex: 0 1 56px;
-            -ms-flex: 0 1 56px;
+                -webkit-box-flex: 0;
                 flex: 0 1 56px;
     }
 

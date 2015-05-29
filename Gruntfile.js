@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 			options: {
 				processors: [
 					require('autoprefixer-core')({
-						browsers: 'last 2 versions'
+						browsers: '> 5%',
+						cascade: false
 					})
 				],
 				diff: false
