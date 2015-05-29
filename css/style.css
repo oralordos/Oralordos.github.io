@@ -29,10 +29,18 @@ nav {
 	left: 0;
 	right: 0;
 	z-index: 999;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
-	flex-flow: row nowrap;
-	justify-content: space-between;
-	align-items: center;
+	-webkit-flex-flow: row nowrap;
+	    -ms-flex-flow: row nowrap;
+	        flex-flow: row nowrap;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 
 nav p {
@@ -59,21 +67,45 @@ nav p {
 .dropdown:hover ul {
 	opacity: 1;
 	visibility: visible;
-	animation: slide-down 0.4s linear;
+	-webkit-animation: slide-down 0.4s linear;
+	        animation: slide-down 0.4s linear;
+}
+
+@-webkit-keyframes slide-down {
+	0% {
+		-webkit-transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
+		        transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
+	}
+	45% {
+		-webkit-transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
+		        transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
+	}
+	70% {
+		-webkit-transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
+		        transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
+	}
+	100% {
+		-webkit-transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
+		        transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
+	}
 }
 
 @keyframes slide-down {
 	0% {
-		transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
+		-webkit-transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
+		        transform: translateX(30%) translateY(-75%) scaleX(0) scaleY(0);
 	}
 	45% {
-		transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
+		-webkit-transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
+		        transform: translateX(30%) translateY(-25%) scaleX(0.1) scaleY(0.5);
 	}
 	70% {
-		transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
+		-webkit-transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
+		        transform: translateX(30%) translateY(0%) scaleX(0.25) scaleY(1);
 	}
 	100% {
-		transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
+		-webkit-transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
+		        transform: translateX(0%) translateY(0%) scaleX(1) scaleY(1);
 	}
 }
 
