@@ -11,9 +11,15 @@ header {
     margin: 0 auto;
     /*background: #fafafa;*/
     height: 85px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     font-family: sans-serif;
 }
 
@@ -37,8 +43,12 @@ nav {
 nav ul {
     font-size: 15px;
     font-weight: 500;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     height: 100%;
 }
 
@@ -49,9 +59,15 @@ nav ul li {
 nav ul li a {
     color: rgba(0, 0, 0, 0.3);
     text-decoration: none;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     padding: 0 15px;
     height: 100%;
 }
@@ -71,7 +87,9 @@ nav ul li a:hover {
     }
 
     .container {
-        flex-direction: column;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
         max-width: none;
         margin: 0;
         height: auto;
@@ -86,7 +104,9 @@ nav ul li a:hover {
     }
 
     nav ul {
-        flex-direction: column;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
         width: 100%;
     }
 
