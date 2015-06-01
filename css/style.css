@@ -193,7 +193,7 @@ h4 {
 
 .container {
     margin: 0 auto;
-    width: 900px;
+    width: 1020px;
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
@@ -218,17 +218,18 @@ h4 {
     flex-flow: row wrap;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    /*align-items: flex-start;*/
+    align-items: flex-start;
 }
 
 .projects a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
     position: relative;
 }
 
 .projects article {
     border-radius: 10px;
+    /*background-color: #f0f;*/
     background-color: #eef;
     text-align: center;
     border: 1px solid #77e;
@@ -239,9 +240,9 @@ h4 {
 
 .projects article img {
     width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin-bottom: 4px;
+    /*border-top-left-radius: 10px;
+    border-top-right-radius: 10px;*/
+    border-radius: 10px;
 }
 
 .projects article p {
@@ -250,17 +251,21 @@ h4 {
     line-height: 1.3em;
 }
 
-.projects a .popup-item {
-    /*position: absolute;
+.projects .popup-item {
+    position: absolute;
     left: 0;
     right: 0;
-    bottom: 10px;
-    background-color: rgba(100, 100, 100, 0.85);
-    /!*max-height: 0;*!/
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    max-height: 0;
     overflow: hidden;
-    transition: max-height 2s ease;*/
+    opacity: 0;
+    /*transition: max-height 2s ease;*/
+    transition: opacity 2s ease;
+    border-radius: 10px;
 }
 
 .projects a:hover .popup-item {
-    /*max-height: 500px;*/
+    max-height: 500px;
+    opacity: 1;
 }
