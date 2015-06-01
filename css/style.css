@@ -218,6 +218,8 @@ h4 {
     flex-flow: row wrap;
     -webkit-justify-content: space-around;
     justify-content: space-around;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
     align-items: flex-start;
 }
 
@@ -261,6 +263,7 @@ h4 {
     overflow: hidden;
     opacity: 0;
     /*transition: max-height 2s ease;*/
+    -webkit-transition: opacity 2s ease;
     transition: opacity 2s ease;
     border-radius: 10px;
 }
