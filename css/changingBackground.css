@@ -1,0 +1,5 @@
+html {
+	background: none no-repeat center center fixed;
+	background-size: cover;
+	transition: background-image 2s;
+}
