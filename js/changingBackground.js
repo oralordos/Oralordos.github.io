@@ -20,11 +20,12 @@ function changeBackground(delta) {
 
 changeBackground(0);
 
+// preloading hack
 var images = new Array();
 function preload() {
-	for (i = 0; i < 20; i++) {
+	for (i = 0; i < backgrounds.length; i++) {
 		images[i] = new Image();
-		images[i].src = 'images/8ball/' + (i+1) + '.png';
+		images[i].src = backgrounds[i];
 	}
 }
 preload();
