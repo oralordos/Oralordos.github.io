@@ -19,3 +19,12 @@ function changeBackground(delta) {
 }
 
 changeBackground(0);
+
+var images = new Array();
+function preload() {
+	for (i = 0; i < 20; i++) {
+		images[i] = new Image();
+		images[i].src = 'images/8ball/' + (i+1) + '.png';
+	}
+}
+preload();
