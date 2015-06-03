@@ -4,6 +4,8 @@ html {
 
 .questionEntry {
 	position: absolute;
+	display: -webkit-box;
+	display: -webkit-flex;
 	display: flex;
 	width: 300px;
 	left: calc(50% - 150px);
@@ -11,6 +13,8 @@ html {
 }
 
 .questionEntry input {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 }
 
@@ -20,6 +24,7 @@ html {
 	position: absolute;
 	top: 100px;
 	left: calc(50% - 250px);
+	-webkit-transition: background-image 1s;
 	transition: background-image 1s;
 	background-image: url('../images/8ball/empty.png');
 	background-size: contain
