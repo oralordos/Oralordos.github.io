@@ -11,6 +11,8 @@ html {
     top: 50px;
     left: 50px;
     z-index: 1;
+    -webkit-transition: left 1s linear, top 1s linear;
+    transition: left 1s linear, top 1s linear;
 }
 
 #abort {
