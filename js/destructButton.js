@@ -73,9 +73,10 @@ function abort() {
         timerId = null;
     }
     timeLeft = null;
+    document.querySelector('html').style.backgroundColor = 'rgb(51,51,51)';
     document.querySelector('#timer').innerHTML = '';
     document.querySelector('#message').innerHTML = '';
 }
 
 document.querySelector('#hit').addEventListener('click', hitButton);
-//document.querySelector('#abort').addEventListener('click', abort);
+document.querySelector('#abort').addEventListener('click', abort);

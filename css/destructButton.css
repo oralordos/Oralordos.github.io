@@ -1,5 +1,7 @@
 html {
     background-color: #333;
+    -webkit-transition: background-color 1s linear;
+    transition: background-color 1s linear;
 }
 
 #hit {
