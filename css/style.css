@@ -36,9 +36,16 @@ nav {
     border-radius: 100%;
     width: 62px;
     height: 62px;
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
     background-color: #abc8e2;
     color: #183152;
@@ -62,12 +69,14 @@ nav {
     bottom: 0;
     visibility: hidden;
     opacity: 0;
+    -webkit-transition: opacity 250ms linear, -webkit-transform 1s, visibility 0s linear 1s;
     transition: opacity 250ms linear, transform 1s, visibility 0s linear 1s;
 }
 
 .button:focus + ul > li {
     visibility: visible;
     opacity: 1;
+    -webkit-transition-delay: 0s, -300ms, 0s;
     transition-delay: 0s, -300ms, 0s;
 }
 
@@ -77,48 +86,64 @@ nav {
 }
 
 .button-menu li:first-child {
+    -webkit-transform: rotate(90deg) translateY(120px);
     transform: rotate(90deg) translateY(120px);
 }
 
 .button:focus + ul > li:first-child {
+    -webkit-transform: rotate(190deg) translateY(120px);
     transform: rotate(190deg) translateY(120px);
 }
 
 .button-menu li:first-child a {
+    -webkit-transform: rotate(-190deg);
     transform: rotate(-190deg);
 }
 
 .button-menu li:nth-child(2) {
+    -webkit-transform: rotate(90deg) translateY(120px);
     transform: rotate(90deg) translateY(120px);
 }
 
 .button:focus + ul > li:nth-child(2) {
+    -webkit-transform: rotate(225deg) translateY(120px);
     transform: rotate(225deg) translateY(120px);
 }
 
 .button-menu li:nth-child(2) a {
+    -webkit-transform: rotate(-225deg);
     transform: rotate(-225deg);
 }
 
 .button-menu li:last-child {
+    -webkit-transform: rotate(90deg) translateY(120px);
     transform: rotate(90deg) translateY(120px);
 }
 
 .button:focus + ul > li:last-child {
+    -webkit-transform: rotate(260deg) translateY(120px);
     transform: rotate(260deg) translateY(120px);
 }
 
 .button-menu li:last-child a {
+    -webkit-transform: rotate(-260deg);
     transform: rotate(-260deg);
 }
 
 .panel-3d {
     max-width: 1080px;
     margin: 20px auto;
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-flow: row wrap;
     flex-flow: row wrap;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
     align-items: flex-start;
+    -webkit-align-content: flex-start;
     align-content: flex-start;
+    -webkit-justify-content: space-around;
     justify-content: space-around;
 }
 
@@ -133,6 +158,7 @@ nav {
 
 .avatar img {
     width: 150px;
+    border: 1px solid black;
 }
 
 .about-me p {
