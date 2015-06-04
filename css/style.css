@@ -37,6 +37,7 @@ nav {
     width: 62px;
     height: 62px;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     background-color: #abc8e2;
@@ -70,13 +71,9 @@ nav {
     transition-delay: 0s, -300ms, 0s;
 }
 
-.button {
-    display: flex;
-    flex-flow: column nowrap;
-}
-
 .button > p {
     font-size: 16px;
+    margin: 0;
 }
 
 .button-menu li:first-child {
