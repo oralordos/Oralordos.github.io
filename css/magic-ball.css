@@ -3,13 +3,11 @@ html {
 }
 
 .questionEntry {
-	position: absolute;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
 	width: 300px;
-	left: calc(50% - 150px);
-	top: 50px;
+	margin: 25px auto;
 }
 
 .questionEntry input {
@@ -21,11 +19,9 @@ html {
 #magic8 {
 	width: 500px;
 	height: 500px;
-	position: absolute;
-	top: 100px;
-	left: calc(50% - 250px);
+	margin: 25px auto;
 	-webkit-transition: background-image 1s;
 	transition: background-image 1s;
 	background-image: url('../images/8ball/empty.png');
-	background-size: contain
+	background-size: contain;
 }
