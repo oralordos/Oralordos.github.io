@@ -13,6 +13,10 @@ function randomizeHitButton() {
     button.style.top = Math.floor(Math.random() * (window.innerHeight - button.clientHeight)) + 'px';
 }
 
+function lerp(start, end, interval) {
+    return (end - start) * interval + start;
+}
+
 function setTimer() {
     var extraS;
     if (timeLeft === 1) {
@@ -22,6 +26,12 @@ function setTimer() {
         extraS = 's';
     }
     document.querySelector('#timer').innerHTML = timeLeft + ' second' + extraS;
+    var interval = 108 / timeLeft - 1;
+    var red = lerp(51, 255, interval);
+    var green = lerp(51, 0, interval);
+    var blue = lerp(51, 0, interval);
+    document.querySelector('html').style.backgroundColor = 'rgb(' + red + ',' + green + ',' + blue + ')';
+
 
     if (timeLeft <= 5) {
         document.querySelector('#message').innerHTML = 'You are all going to die!';
@@ -65,4 +75,4 @@ function abort() {
 }
 
 document.querySelector('#hit').addEventListener('click', hitButton);
-document.querySelector('#abort').addEventListener('click', abort);
+//document.querySelector('#abort').addEventListener('click', abort);
