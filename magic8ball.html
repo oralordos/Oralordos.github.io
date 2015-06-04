@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Magic 8 Ball</title>
-	<link rel="stylesheet" href="css/reset.css">
-	<link rel="stylesheet" href="css/magic-ball.css">
+    <meta charset="UTF-8">
+    <title>Magic 8 Ball</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/magic-ball.css">
 </head>
 <body>
-	<div class="magic">
-		<div class="questionEntry">
-			<input type="text">
-			<button>Ask your question</button>
-		</div>
-		<div id="magic8"></div>
-	</div>
+<div class="magic">
+    <div class="questionEntry">
+        <label>
+            <input type="text">
+        </label>
+        <button>Ask your question</button>
+    </div>
+    <div id="magic8"></div>
+</div>
 
-	<!-- Image preloading hack -->
-	<script src="js/magic-ball.js"></script>
-	<div class="hidden">
-	<script type="text/javascript">
-			var images = [];
-			function preload() {
-				for (i = 0; i < 20; i++) {
-					images[i] = new Image();
-					images[i].src = 'images/8ball/' + (i+1) + '.png';
-				}
-			}
-			preload();
-	</script>
+<!-- Image preloading hack -->
+<script src="js/magic-ball.js"></script>
+<div class="hidden">
+    <script type="text/javascript">
+        var images = [];
+        function preload() {
+            for (var i = 0; i < 20; i++) {
+                images[i] = new Image();
+                images[i].src = 'images/8ball/' + (i + 1) + '.png';
+            }
+        }
+        preload();
+    </script>
 </div>
 </body>
 </html>
