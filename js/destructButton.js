@@ -48,6 +48,9 @@ function setTimer() {
     else if (timeLeft <= 25) {
         document.querySelector('#message').innerHTML = 'The button needs to be pressed!';
     }
+    else {
+        document.querySelector('#message').innerHTML = '';
+    }
 
 
     if (timeLeft === 0) {
