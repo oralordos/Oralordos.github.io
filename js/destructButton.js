@@ -26,10 +26,10 @@ function setTimer() {
         extraS = 's';
     }
     document.querySelector('#timer').innerHTML = timeLeft + ' second' + extraS;
-    var interval = 108 / timeLeft - 1;
-    var red = lerp(51, 255, interval);
-    var green = lerp(51, 0, interval);
-    var blue = lerp(51, 0, interval);
+    var interval = (108 - timeLeft) / 108;
+    var red = Math.floor(lerp(51, 255, interval));
+    var green = Math.floor(lerp(51, 0, interval));
+    var blue = Math.floor(lerp(51, 0, interval));
     document.querySelector('html').style.backgroundColor = 'rgb(' + red + ',' + green + ',' + blue + ')';
 
 
