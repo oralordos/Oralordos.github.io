@@ -22,6 +22,6 @@ html {
 	margin: 25px auto;
 	-webkit-transition: background-image 1s;
 	transition: background-image 1s;
-	background-image: url('../images/8ball/empty.png');
+	background-image: url('8ball/empty.png');
 	background-size: contain;
 }

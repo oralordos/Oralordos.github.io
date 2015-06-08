@@ -10,7 +10,7 @@ function createMoles(x, y) {
             var newMole = document.createElement('img');
             newMole.className = 'mole';
             newMole.style.opacity = '0.3';
-            newMole.src = 'images/whackamole.jpg';
+            newMole.src = 'whackamole.jpg';
             newMole.dataset.timerId = 'null';
             newRow.appendChild(newMole);
         }

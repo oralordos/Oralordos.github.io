@@ -1,9 +1,9 @@
 var backgrounds = [
-	'images/wallpapers/729965-1440x900-[DesktopNexus.com].jpg',
-	'images/wallpapers/813495-1440x900-[DesktopNexus.com].jpg',
-	'images/wallpapers/821425-1440x900-[DesktopNexus.com].jpg',
-	'images/wallpapers/1036809-1440x900-[DesktopNexus.com].jpg',
-	'images/wallpapers/1062969-1440x900-[DesktopNexus.com].jpg'
+	'wallpapers/729965-1440x900-[DesktopNexus.com].jpg',
+	'wallpapers/813495-1440x900-[DesktopNexus.com].jpg',
+	'wallpapers/821425-1440x900-[DesktopNexus.com].jpg',
+	'wallpapers/1036809-1440x900-[DesktopNexus.com].jpg',
+	'wallpapers/1062969-1440x900-[DesktopNexus.com].jpg'
 ];
 
 
