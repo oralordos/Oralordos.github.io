@@ -6,9 +6,12 @@ function onEnter(event) {
   var big = document.querySelector('#bigger');
   big.style.backgroundImage = 'url("' + event.target.src + '")';
   big.style.transform = 'scale(1)';
-  console.dir(event.target);
-  big.style.left = event.target.x - 300 + 'px';
-  big.style.top = event.target.y + 110 + 'px';
+}
+
+function onMove(event) {
+  var big = document.querySelector('#bigger');
+  big.style.left = event.clientX - 350 + 'px';
+  big.style.top = event.clientY + 10 + 'px';
 }
 
 function onLeave(event) {
@@ -22,6 +25,7 @@ for (var i = 1; i < 10; i++) {
   image.alt = 'Sports Image ' + i;
   image.addEventListener('mouseenter', onEnter);
   image.addEventListener('mouseleave', onLeave);
+  image.addEventListener('mousemove', onMove);
   container.appendChild(image);
 }
 

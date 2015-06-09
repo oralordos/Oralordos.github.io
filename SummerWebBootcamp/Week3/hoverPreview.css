@@ -1,6 +1,6 @@
 #bigger {
-  -webkit-transition: -webkit-transform 1s ease 300ms, left 1s;
-  transition: transform 1s ease 300ms, left 1s;
+  -webkit-transition: -webkit-transform 1s ease 300ms;
+  transition: transform 1s ease 300ms;
   background: none no-repeat center center;
   background-size: cover;
   width: 700px;
