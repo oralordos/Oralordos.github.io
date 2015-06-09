@@ -6,6 +6,7 @@
 html {
   background: url('') no-repeat center center fixed;
   background-size: cover;
+  -webkit-transition: background-image 1s;
   transition: background-image 1s;
 }
 
@@ -14,7 +15,10 @@ ul {
   top: 5px;
   left: 0;
   right: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: space-around;
   justify-content: space-around;
   list-style: none;
 }

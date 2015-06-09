@@ -12,12 +12,12 @@ module.exports = function(grunt) {
 				diff: false
 			},
 			files: {
-				src: 'css/*.css'
+				src: ['*.css', 'SummerWebBootcamp/**/*.css']
 			}
 		},
 		watch: {
 			styles: {
-				files: ['css/*.css'],
+				files: ['*.css'],
 				tasks: ['postcss']
 			}
 		}
@@ -25,5 +25,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-postcss');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('default', ['watch'])
+	grunt.registerTask('default', ['postcss'])
 };
