@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			styles: {
-				files: ['*.css'],
+				files: ['*.css', 'SummerWebBootcamp/**/*.css'],
 				tasks: ['postcss']
 			}
 		}
