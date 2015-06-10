@@ -5,7 +5,7 @@ var sounds = ['AmazingLee',
 			  'Shiloah'];
 
 function onClick(e) {
-	var player = document.querySelector('#player');
+	var player = document.querySelector('audio');
 	if (e.target.className === 'playing') {
 		player.pause();
 		e.target.className = 'paused';
@@ -42,7 +42,7 @@ function onLoad() {
 		newSong.addEventListener('click', onClick);
 		playerList.appendChild(newSong);
 	}
-	var player = document.querySelector('#player');
+	var player = document.querySelector('audio');
 	player.addEventListener('ended', onSongEnd);
 }
 
