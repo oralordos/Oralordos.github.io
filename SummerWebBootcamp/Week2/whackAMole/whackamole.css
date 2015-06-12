@@ -2,11 +2,21 @@ html {
     background-color: chocolate;
 }
 
-#game {
+main {
     margin: 0 auto;
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
+}
+
+#game {
     background-color: brown;
     position: relative;
 }
@@ -27,30 +37,65 @@ html {
     position: absolute;
     left: 0;
     top: 0;
+    -webkit-transition: left 1s linear, top 1s linear;
     transition: left 1s linear, top 1s linear;
 }
 
 .hit {
+    -webkit-animation: smack 250ms linear;
     animation: smack 250ms linear;
+}
+
+@-webkit-keyframes smack {
+    0% {
+        -webkit-transform: scale(1) translate(0, 0);
+        transform: scale(1) translate(0, 0);
+    }
+    20% {
+        -webkit-transform: scale(1.2) translate(0, 0);
+        transform: scale(1.2) translate(0, 0);
+    }
+    40% {
+        -webkit-transform: scale(1.2) translate(10px, 0);
+        transform: scale(1.2) translate(10px, 0);
+    }
+    60% {
+        -webkit-transform: scale(1.2) translate(-10px, 0);
+        transform: scale(1.2) translate(-10px, 0);
+    }
+    80% {
+        -webkit-transform: scale(1.2) translate(0, 0);
+        transform: scale(1.2) translate(0, 0);
+    }
+    100% {
+        -webkit-transform: scale(1) translate(0, 0);
+        transform: scale(1) translate(0, 0);
+    }
 }
 
 @keyframes smack {
     0% {
+        -webkit-transform: scale(1) translate(0, 0);
         transform: scale(1) translate(0, 0);
     }
     20% {
+        -webkit-transform: scale(1.2) translate(0, 0);
         transform: scale(1.2) translate(0, 0);
     }
     40% {
+        -webkit-transform: scale(1.2) translate(10px, 0);
         transform: scale(1.2) translate(10px, 0);
     }
     60% {
+        -webkit-transform: scale(1.2) translate(-10px, 0);
         transform: scale(1.2) translate(-10px, 0);
     }
     80% {
+        -webkit-transform: scale(1.2) translate(0, 0);
         transform: scale(1.2) translate(0, 0);
     }
     100% {
+        -webkit-transform: scale(1) translate(0, 0);
         transform: scale(1) translate(0, 0);
     }
 }

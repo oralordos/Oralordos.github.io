@@ -6,7 +6,7 @@ var interval = 10;
 function createMoles(x, y) {
     var game = document.querySelector('#game');
     game.style.width = x * 175 + 8 * x + 'px';
-    game.style.height = y * 150 + 8 * y + 'px';
+    game.style.height = Math.round(y * 131.75676) + 8 * y + 'px';
     for (var i = 0; i < y; i++) {
         var newRow = document.createElement('div');
         newRow.className = 'game-row';
