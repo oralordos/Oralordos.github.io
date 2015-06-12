@@ -1,0 +1,56 @@
+html {
+    background-color: chocolate;
+}
+
+#game {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: brown;
+    position: relative;
+}
+
+#points {
+    display: inline-block;
+    font-size: 20px;
+}
+
+.mole {
+    width: 175px;
+    margin: 4px;
+    opacity: 0.3;
+}
+
+.boss {
+    width: 225px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: left 1s linear, top 1s linear;
+}
+
+.hit {
+    animation: smack 250ms linear;
+}
+
+@keyframes smack {
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+    20% {
+        transform: scale(1.2) translate(0, 0);
+    }
+    40% {
+        transform: scale(1.2) translate(10px, 0);
+    }
+    60% {
+        transform: scale(1.2) translate(-10px, 0);
+    }
+    80% {
+        transform: scale(1.2) translate(0, 0);
+    }
+    100% {
+        transform: scale(1) translate(0, 0);
+    }
+}
