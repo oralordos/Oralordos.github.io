@@ -30,7 +30,6 @@ li {
 	text-align: center;
 	box-shadow: 0 2px 2px 1px black;
 	-webkit-user-select: none;
-	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }

@@ -5,6 +5,7 @@
     "type": "git",
     "url": "git+https://github.com/Oralordos/Oralordos.github.io.git"
   },
+  "license": "MIT",
   "devDependencies": {
     "autoprefixer-core": "^5.2.0",
     "grunt": "^0.4.5",
