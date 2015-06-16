@@ -43,7 +43,7 @@ function getNames() {
 function onLoad() {
     getNames();
     searchBox.addEventListener('keyup', onKeyUp);
-    setInterval(positionPeople, 200);
+    setInterval(positionPeople, 100);
 }
 
 window.addEventListener('load', onLoad);

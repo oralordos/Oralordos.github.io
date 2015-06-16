@@ -10,7 +10,8 @@
 .person {
     width: 1080px;
     max-height: 40px;
-    transition: top 500ms, max-height 500ms;
+    -webkit-transition: top 250ms, max-height 250ms;
+    transition: top 250ms, max-height 250ms;
     overflow: hidden;
     position: absolute;
     border: 1px solid black;

@@ -11,8 +11,14 @@ html {
 	background-color: rgba(0, 0, 0, 0.8);
 	width: 100vw;
 	height: 100vh;
+	display: -webkit-box;
+	display: -webkit-flex;
 	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
 	align-items: center;
 	position: absolute;
 	left: 0;
@@ -25,10 +31,17 @@ html {
 }
 
 #photos {
+	display: -webkit-box;
+	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
+	-webkit-justify-content: space-around;
 	justify-content: space-around;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
 	align-items: center;
+	-webkit-align-content: space-around;
 	align-content: space-around;
 	min-width: 98vw;
 	min-height: 100vh;
