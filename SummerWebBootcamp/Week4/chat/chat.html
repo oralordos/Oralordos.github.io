@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatting</title>
+    <style>
+        #input {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 25px;
+        }
+
+        #chat {
+            height: calc(100vh - 20px);
+        }
+
+        #input input {
+            width: 100%;
+            height: 25px;
+        }
+
+        a {
+            display: block;
+        }
+
+        .message {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<section id="chat"></section>
+<section id="input">
+    <form name="chat">
+        <label for="enterText"></label>
+        <input id="enterText" name="enterText" type="text"/>
+        <input id="submit" type="submit" value=""/>
+    </form>
+</section>
+<script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+<script>
+    var ref = new Firebase('https://chattersummerweb.firebaseio.com'),
+        regex = /^(?:https?\:\/\/)?(?:www\.)?.+(?:\.com|\.net|\.org)/;
+
+    document.querySelector('#submit').addEventListener('click', function(e) {
+        var text = document.querySelector('#enterText');
+        e.preventDefault();
+        ref.push({
+            message: text.value,
+            isURL: text.value.search(regex) !== -1
+        });
+        text.value = '';
+    });
+
+    ref.on('value', function(snapshot) {
+        var chatArea = document.querySelector('#chat'),
+            dataTree = snapshot.val();
+        chatArea.innerHTML = '';
+        for (var item in dataTree) {
+            var newMessage = document.createElement('div'),
+                message = dataTree[item].message;
+            newMessage.className = 'message';
+            newMessage.innerHTML = '<a href="' + message + '">' + message + '</a>';
+            if (dataTree[item].isURL) {
+                newMessage.innerHTML = '<a href="' + message + '">' + message + '</a>';
+                newMessage.innerHTML += '<a href="' + message + '"><img src="' + message + '" alt="' + message + '" /></a>'
+            }
+            else {
+                newMessage.innerHTML = '<p>' + message + '</p>';
+            }
+            chatArea.appendChild(newMessage);
+        }
+    });
+</script>
+</body>
+</html>
