@@ -4,8 +4,12 @@ myApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/list', {
         templateUrl: 'list.html',
         controller: 'listController'
-    });
-    $routeProvider.otherwise({
+    })
+    .when('/details/:person', {
+        templateUrl: 'detail.html',
+        controller: 'detailController'
+    })
+    .otherwise({
         redirectTo: '/list'
     });
 }]);

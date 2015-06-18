@@ -5,3 +5,8 @@ artistApp.controller('listController', ['$scope', '$firebaseArray', function($sc
 
     $scope.people = $firebaseArray(ref.child('people'));
 }]);
+
+artistApp.controller('detailController', ['$scope', '$routeParams', '$firebaseObject', function($scope, $routeParams, $firebaseObject) {
+    var ref = new Firebase('https://angular-bootcamp.firebaseio.com/people');
+    $scope.person = $firebaseObject(ref.child($routeParams.person));
+}]);
