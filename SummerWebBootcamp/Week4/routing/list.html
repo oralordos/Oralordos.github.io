@@ -1,3 +1,11 @@
+<form ng-submit="add()">
+    <input type="text" ng-model="newItem.name" placeholder="Name" required/>
+    <input type="text" ng-model="newItem.shortname" placeholder="Shortname" required/>
+    <input type="text" ng-model="newItem.reknown" placeholder="Renown" required/>
+    <textarea placeholder="Bio" ng-model="newItem.bio" cols="30" rows="5" required></textarea>
+    <input type="submit"/>
+</form>
+
 <input type="text" ng-model="query" placeholder="Search"/>
 
 <div class="person" ng-repeat="person in people | filter: {name:query}">
@@ -8,4 +16,5 @@
 
         <img ng-src="../../Week3/loadImage/images/{{person.shortname}}_tn.jpg" alt="Image of {{person.name}}"/>
     </a>
+    <button ng-click="delete(person.$id)">Delete</button>
 </div>
