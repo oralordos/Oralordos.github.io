@@ -1,0 +1,8 @@
+<input type="text" ng-model="query" placeholder="Search"/>
+
+<div class="person" ng-repeat="person in people | filter: {name:query}">
+    <h1>{{person.name}}</h1>
+    <h3>{{person.reknown}}</h3>
+    <p>{{item.money | currency}}</p>
+    <p>{{person.bio}}</p>
+</div>
