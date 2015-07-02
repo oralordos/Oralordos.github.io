@@ -64,7 +64,7 @@
 
 	var proto = Object.create(HTMLElement.prototype);
 
-	proto.attachedCallback = function() {
+	proto.createdCallback = function() {
 		var clone = template.cloneNode(true);
 		var shadow = this.createShadowRoot();
 
