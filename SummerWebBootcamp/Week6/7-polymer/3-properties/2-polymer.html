@@ -28,7 +28,7 @@
       if (this.intervalId) {
         clearInterval(this.intervalId);
       }
-      this.intervalId = setInterval(this.toggleBlink.bind(this), newVal || this.properties.interval.value);
+      this.intervalId = setInterval(this.toggleBlink.bind(this), newVal);
       if (newVal === 0) {
         this.interval = this.properties.interval.value;
       }
