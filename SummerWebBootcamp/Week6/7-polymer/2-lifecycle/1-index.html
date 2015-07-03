@@ -5,13 +5,14 @@
   <title>Document</title>
 </head>
 <body>
-  <my-blink interval=50>Blah blah blah</my-blink>
+  <my-blink interval="1000">Testing</my-blink>
+  <my-blink interval=300>Blah blah blah</my-blink>
 
   <script>
     var proto = Object.create(HTMLElement.prototype);
 
     proto.toggleBlink = function() {
-      this.style.display = this.style.display === '' ? 'none' : '';
+      this.style.visibility = this.style.visibility === '' ? 'hidden' : '';
     }
 
     proto.attachedCallback = function() {
