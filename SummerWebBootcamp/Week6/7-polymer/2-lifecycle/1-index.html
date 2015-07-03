@@ -28,7 +28,7 @@
     proto.attributeChangedCallback = function(attr, oldVal, newVal) {
       clearInterval(this.intervalId);
       var interval = newVal || 500;
-      this.intervalId = setInterval(proto.toggleBlink.bind(this), interval);
+      this.intervalId = setInterval(this.toggleBlink.bind(this), interval);
     };
 
     document.registerElement('my-blink', {prototype: proto});
