@@ -2,58 +2,47 @@
 <link href='http://fonts.googleapis.com/css?family=Rochester' rel='stylesheet' type='text/css'>
 
 <dom-module id='fcc-diploma'>
+  <style>
+    :host {
+      box-sizing: border-box;
+      border: 20px solid maroon;
+      background-image: url("2-diploma-bg.jpg");
+      display: inline-block;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1, h2, p {
+      font-family: 'Rochester', cursive;
+      color: maroon;
+      margin: 20px 10px;
+    }
+
+    h1 {
+      font-size : 60px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 50px;
+      margin-bottom: 0;
+      border-bottom: 3px solid maroon;
+    }
+
+    p {
+      font-size: 30px;
+    }
+  </style>
+
   <template>
-    <style>
-      .diploma {
-        box-sizing: border-box;
-        border: 30px solid maroon;
-        background-image: url("2-diploma-bg.jpg");
-        display: inline-block;
-        text-align: center;
-        padding: 20px;
-      }
-
-      h1, h2, p {
-        font-family: 'Rochester', cursive;
-        color: maroon;
-        margin: 20px 10px;
-      }
-
-      h1 {
-        font-size : 60px;
-        margin-bottom: 30px;
-      }
-
-      h2 {
-        font-size: 50px;
-        margin-bottom: 0;
-      }
-
-      .underline {
-        background-color: maroon;
-        width: 380px;
-        height: 10px;
-        left: 40px;
-        position: relative
-      }
-
-      p {
-        font-size: 30px;
-      }
-    </style>
-
-    <div class="diploma">
-      <h1 id="school"></h1>
-      <p>Has conferred upon</p>
-      <h2 id="name"></h2>
-      <div class="underline"></div>
-      <p>having completed the prescribed studies and</p>
-      <p>satisfied the requirements for the</p>
-      <h2 id="course"></h2>
-      <div class="underline"></div>
-      <p>issued by the board of regents upon</p>
-      <p>recommendation of the faculty</p>
-    </div>
+    <h1>{{school}}</h1>
+    <p>Has conferred upon</p>
+    <h2>{{person}}</h2>
+    <p>having completed the prescribed studies and</p>
+    <p>satisfied the requirements for the</p>
+    <h2>{{course}}</h2>
+    <p>issued by the board of regents upon</p>
+    <p>recommendation of the faculty</p>
   </template>
 </dom-module>
 
@@ -65,26 +54,6 @@
       school: String,
       person: String,
       course: String
-    },
-
-    attached: function() {
-      this.querySelector('#school').textContent = this.school;
-      this.querySelector('#name').textContent = this.person;
-      this.querySelector('#course').textContent = this.course;
-    },
-
-    attributeChanged: function(attr, oldVal, newVal) {
-      switch(attr) {
-        case 'school':
-          this.querySelector('#school').textContent = newVal;
-          break;
-        case 'person':
-          this.querySelector('#name').textContent = newVal;
-          break;
-        case 'course':
-          this.querySelector('#course').textContent = newVal;
-          break;
-      }
     }
   });
 </script>
