@@ -36,15 +36,19 @@ func main() {
 	switch {
 	case strings.HasSuffix(from, "mi"):
 		fromNum, err = strconv.ParseFloat(from[:len(from)-2], 64)
+		miles = fromNum
 		fromType = "mi"
 	case strings.HasSuffix(from, "km"):
 		fromNum, err = strconv.ParseFloat(from[:len(from)-2], 64)
+		miles = fromNum * kmToMi
 		fromType = "km"
 	case strings.HasSuffix(from, "ft"):
 		fromNum, err = strconv.ParseFloat(from[:len(from)-2], 64)
+		miles = fromNum * ftToMi
 		fromType = "ft"
 	case strings.HasSuffix(from, "m"):
 		fromNum, err = strconv.ParseFloat(from[:len(from)-1], 64)
+		miles = fromNum * mToMi
 		fromType = "m"
 	default:
 		log.Fatalf("Unidentified type detected on: %s\n", from)
@@ -52,17 +56,6 @@ func main() {
 
 	if err != nil {
 		log.Fatalln(err)
-	}
-
-	switch fromType {
-	case "mi":
-		miles = fromNum
-	case "km":
-		miles = fromNum * kmToMi
-	case "ft":
-		miles = fromNum * ftToMi
-	case "m":
-		miles = fromNum * mToMi
 	}
 
 	switch to {
