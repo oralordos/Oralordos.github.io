@@ -67,6 +67,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer server.Close()
 
 	requestChannel := make(chan databaseRequest)
 	go handleDatabase(requestChannel)
