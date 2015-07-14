@@ -1,30 +1,36 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"net"
 )
 
 func handleConn(conn net.Conn) {
 	defer conn.Close()
-	fmt.Println("Connection accepted from:", conn.RemoteAddr())
-	for {
-		data := make([]byte, 1024)
-		n, err := conn.Read(data)
-		if err == io.EOF {
-			if n == 0 {
-				break
+	scn := bufio.NewScanner(conn)
+	for scn.Scan() {
+		line := scn.Text()
+		bs := []byte(line)
+		result := make([]byte, len(bs))
+		for i, v := range bs {
+			if v <= 'z' && v >= 'a' {
+				result[i] = v + 13
+				if result[i] > 'z' {
+					result[i] -= 26
+				}
+			} else if v <= 'Z' && v >= 'A' {
+				result[i] = v + 13
+				if result[i] > 'Z' {
+					result[i] -= 26
+				}
+			} else {
+				result[i] = v
 			}
-		} else if err != nil {
-			fmt.Println(err.Error())
-			break
 		}
-		fmt.Printf("Got data from \"%s\" with a payload of: %s", conn.RemoteAddr(), data[:n])
-		conn.Write(data[:n])
+		fmt.Fprintf(conn, "%s\n%s\n", result, bs)
 	}
-	fmt.Println("Connection closed at:", conn.RemoteAddr())
 }
 
 func main() {
