@@ -24,8 +24,7 @@ func dogHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/cat/", catHandler)
-	mux.HandleFunc("/dog/", dogHandler)
-	http.ListenAndServe(":9000", mux)
+	http.HandleFunc("/cat/", catHandler)
+	http.HandleFunc("/dog/", dogHandler)
+	http.ListenAndServe(":9000", nil)
 }
