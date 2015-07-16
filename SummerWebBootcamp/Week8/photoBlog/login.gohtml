@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
+  {{if .}}
+  <p>Incorrect username or password</p>
+  {{end}}
+  <a href="/">Back</a>
+  <form method="POST">
+    <input type="text" name="username" placeholder="username" required>
+    <input type="password" name="password" placeholder="password" required>
+    <input type="submit" value="Login">
+  </form>
+</body>
+</html>

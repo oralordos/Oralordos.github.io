@@ -8,9 +8,11 @@
   {{if .}}
   <p>File Uploaded</p>
   {{end}}
+  <a href="/">Main Page</a>
+  <a href="/logout">Logout</a>
   <form method="post" enctype="multipart/form-data">
-    <input type="file" name="image" required>
-    <input type="submit">
+    <input type="file" name="image" accept="image/*" required>
+    <input type="submit" value="Upload">
   </form>
 </body>
 </html>
