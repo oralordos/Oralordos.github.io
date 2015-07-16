@@ -24,7 +24,7 @@ html {
   background-color: lightblue;
   border-radius: 10px;
   display: flex;
-  flex-flow: row, wrap;
+  flex-flow: row wrap;
   justify-content: center;
   align-content: center;
   box-shadow: 1px 2px 3px 1px black
