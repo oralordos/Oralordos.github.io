@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Upload</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  {{if .}}
-  <p>File Uploaded</p>
-  {{end}}
-  <a href="/">Main Page</a>
-  <a href="/logout">Logout</a>
-  <form method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept="image/*" required>
-    <input type="submit" value="Upload">
-  </form>
+  <nav class="right-align">
+    <a href="/" class="button">Main Page</a>
+    <a href="/logout" class="button">Logout</a>
+  </nav>
+  <section class="center-content">
+    <section class="upload-container">
+      {{if .}}
+      <p>File Uploaded</p>
+      {{end}}
+      <form method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <input type="submit" value="Upload">
+      </form>
+    </section>
+  </section>
 </body>
 </html>

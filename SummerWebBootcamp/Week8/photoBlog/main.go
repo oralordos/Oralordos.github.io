@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"html/template"
 	"io"
 	"net/http"
@@ -31,7 +33,7 @@ func (ft *fileTimes) Swap(i, j int) {
 func mainSite(res http.ResponseWriter, req *http.Request) {
 	tpl, err := template.ParseFiles("mainSite.gohtml")
 	if err != nil {
-		http.Error(res, "Server Error", 500)
+		http.Error(res, "Server Error", http.StatusInternalServerError)
 		return
 	}
 	times := fileTimes{}
@@ -49,7 +51,11 @@ func mainSite(res http.ResponseWriter, req *http.Request) {
 	for i, v := range times {
 		sortedImages[i] = images[v]
 	}
-	tpl.Execute(res, sortedImages)
+	err = tpl.Execute(res, sortedImages)
+	if err != nil {
+		http.Error(res, "Server Error", http.StatusInternalServerError)
+		return
+	}
 }
 
 func login(res http.ResponseWriter, req *http.Request) {
@@ -66,51 +72,63 @@ func login(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 	if session.Values["user"] == "admin" {
-		http.Redirect(res, req, "/admin", 303)
+		http.Redirect(res, req, "/admin", http.StatusSeeOther)
 		return
 	}
 
 	tpl, err := template.ParseFiles("login.gohtml")
 	if err != nil {
-		http.Error(res, "Server Error", 500)
+		http.Error(res, "Server Error", http.StatusInternalServerError)
 		return
 	}
-	tpl.Execute(res, failedLogin)
+	err = tpl.Execute(res, failedLogin)
+	if err != nil {
+		http.Error(res, "Server Error", http.StatusInternalServerError)
+		return
+	}
 }
 
 func logout(res http.ResponseWriter, req *http.Request) {
 	session, _ := store.Get(req, "session")
 	delete(session.Values, "user")
 	store.Save(req, res, session)
-	http.Redirect(res, req, "/", 303)
+	http.Redirect(res, req, "/", http.StatusSeeOther)
 }
 
 func adminSite(res http.ResponseWriter, req *http.Request) {
 	session, _ := store.Get(req, "session")
 	if session.Values["user"] != "admin" {
-		http.Redirect(res, req, "/login", 303)
+		http.Redirect(res, req, "/login", http.StatusSeeOther)
 		return
 	}
 	gotFile := false
 	if req.Method == "POST" {
-		file, header, err := req.FormFile("image")
+		file, _, err := req.FormFile("image")
 		if err != nil {
-			http.Error(res, "Server Error", 500)
+			http.Error(res, "Server Error", http.StatusInternalServerError)
 			return
 		}
 		defer file.Close()
 
-		filename := "images/" + header.Filename
+		ckSum := md5.New()
+		io.Copy(ckSum, file)
+		filename := "images/" + hex.EncodeToString(ckSum.Sum(nil))
 		wtr, err := os.Create(filename)
 		if err != nil {
-			http.Error(res, "Server Error", 500)
+			http.Error(res, "Server Error", http.StatusInternalServerError)
 			return
 		}
 		defer wtr.Close()
 
+		_, err = file.Seek(0, 0)
+		if err != nil {
+			http.Error(res, "Server Error", http.StatusInternalServerError)
+			return
+		}
+
 		_, err = io.Copy(wtr, file)
 		if err != nil {
-			http.Error(res, "Server Error", 500)
+			http.Error(res, "Server Error", http.StatusInternalServerError)
 			return
 		}
 
@@ -119,20 +137,28 @@ func adminSite(res http.ResponseWriter, req *http.Request) {
 
 	tpl, err := template.ParseFiles("adminSite.gohtml")
 	if err != nil {
-		http.Error(res, "Server Error", 500)
+		http.Error(res, "Server Error", http.StatusInternalServerError)
 		return
 	}
-	tpl.Execute(res, gotFile)
+	err = tpl.Execute(res, gotFile)
+	if err != nil {
+		http.Error(res, "Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func getCSS(res http.ResponseWriter, req *http.Request) {
+	http.ServeFile(res, req, "style.css")
 }
 
 func toHTTPSHandler(res http.ResponseWriter, req *http.Request) {
 	changedURL := "https://" + req.Host[:len(req.Host)-1] + "1/" + req.URL.Path
-	http.Redirect(res, req, changedURL, 303)
+	http.Redirect(res, req, changedURL, http.StatusSeeOther)
 }
 
 func toHTTPHandler(res http.ResponseWriter, req *http.Request) {
 	changedURL := "http://" + req.Host[:len(req.Host)-1] + "0/" + req.URL.Path
-	http.Redirect(res, req, changedURL, 303)
+	http.Redirect(res, req, changedURL, http.StatusSeeOther)
 }
 
 func main() {
@@ -143,6 +169,7 @@ func main() {
 	http.Handle("/images/", imagesHandler)
 	http.HandleFunc("/login", toHTTPSHandler)
 	http.HandleFunc("/logout", toHTTPSHandler)
+	http.HandleFunc("/style.css", getCSS)
 	go http.ListenAndServe(":9000", nil)
 
 	mux := http.NewServeMux()
@@ -151,5 +178,6 @@ func main() {
 	mux.Handle("/images/", imagesHandler)
 	mux.HandleFunc("/login", login)
 	mux.HandleFunc("/logout", logout)
+	mux.HandleFunc("/style.css", getCSS)
 	http.ListenAndServeTLS(":9001", "cert.pem", "key.pem", mux)
 }

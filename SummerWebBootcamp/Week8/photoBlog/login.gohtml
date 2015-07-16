@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  {{if .}}
-  <p>Incorrect username or password</p>
-  {{end}}
-  <a href="/">Back</a>
-  <form method="POST">
-    <input type="text" name="username" placeholder="username" required>
-    <input type="password" name="password" placeholder="password" required>
-    <input type="submit" value="Login">
-  </form>
+  <a class="button right-align" href="/">Back</a>
+  <section class="center-content">
+    <form class="login" method="POST">
+      {{if .}}
+      <p class="error-message">Incorrect username or password</p>
+      {{end}}
+      <input type="text" name="username" placeholder="username" required>
+      <input type="password" name="password" placeholder="password" required>
+      <input type="submit" value="Login">
+    </form>
+  </section>
 </body>
 </html>
