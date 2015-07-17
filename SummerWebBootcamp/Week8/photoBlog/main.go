@@ -10,6 +10,9 @@ import (
 	"path/filepath"
 	"sort"
 	"time"
+
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/log"
 )
 
 type fileTimes []time.Time
@@ -27,9 +30,11 @@ func (ft *fileTimes) Swap(i, j int) {
 }
 
 func mainSite(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
 	tpl, err := template.ParseFiles("mainSite.gohtml")
 	if err != nil {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
+		log.Errorf(ctx, err.Error())
 		return
 	}
 	times := fileTimes{}
@@ -50,16 +55,19 @@ func mainSite(res http.ResponseWriter, req *http.Request) {
 	err = tpl.Execute(res, sortedImages)
 	if err != nil {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
+		log.Errorf(ctx, err.Error())
 		return
 	}
 }
 
 func adminSite(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
 	gotFile := false
 	if req.Method == "POST" {
 		file, _, err := req.FormFile("image")
 		if err != nil {
 			http.Error(res, "Server Error", http.StatusInternalServerError)
+			log.Errorf(ctx, err.Error())
 			return
 		}
 		defer file.Close()
@@ -70,6 +78,7 @@ func adminSite(res http.ResponseWriter, req *http.Request) {
 		wtr, err := os.Create(filename)
 		if err != nil {
 			http.Error(res, "Server Error", http.StatusInternalServerError)
+			log.Errorf(ctx, err.Error())
 			return
 		}
 		defer wtr.Close()
@@ -77,12 +86,14 @@ func adminSite(res http.ResponseWriter, req *http.Request) {
 		_, err = file.Seek(0, 0)
 		if err != nil {
 			http.Error(res, "Server Error", http.StatusInternalServerError)
+			log.Errorf(ctx, err.Error())
 			return
 		}
 
 		_, err = io.Copy(wtr, file)
 		if err != nil {
 			http.Error(res, "Server Error", http.StatusInternalServerError)
+			log.Errorf(ctx, err.Error())
 			return
 		}
 
@@ -92,12 +103,14 @@ func adminSite(res http.ResponseWriter, req *http.Request) {
 	tpl, err := template.ParseFiles("adminSite.gohtml")
 	if err != nil {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
+		log.Errorf(ctx, err.Error())
 		return
 	}
 
 	err = tpl.Execute(res, gotFile)
 	if err != nil {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
+		log.Errorf(ctx, err.Error())
 		return
 	}
 }

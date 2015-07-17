@@ -1,5 +1,5 @@
 application: xenon-petal-100822
-version: 1
+version: profile
 runtime: go
 api_version: go1
 
