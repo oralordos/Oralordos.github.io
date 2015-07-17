@@ -1,4 +1,4 @@
-package main
+package photo
 
 import (
 	"crypto/md5"
@@ -10,11 +10,7 @@ import (
 	"path/filepath"
 	"sort"
 	"time"
-
-	"github.com/gorilla/sessions"
 )
-
-var store = sessions.NewCookieStore([]byte("asdf"))
 
 type fileTimes []time.Time
 
@@ -58,49 +54,7 @@ func mainSite(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func login(res http.ResponseWriter, req *http.Request) {
-	failedLogin := false
-	session, _ := store.Get(req, "session")
-	if req.Method == "POST" {
-		username := req.FormValue("username")
-		password := req.FormValue("password")
-		if username == "me" && password == "you" {
-			session.Values["user"] = "admin"
-			store.Save(req, res, session)
-		} else {
-			failedLogin = true
-		}
-	}
-	if session.Values["user"] == "admin" {
-		http.Redirect(res, req, "/admin", http.StatusSeeOther)
-		return
-	}
-
-	tpl, err := template.ParseFiles("login.gohtml")
-	if err != nil {
-		http.Error(res, "Server Error", http.StatusInternalServerError)
-		return
-	}
-	err = tpl.Execute(res, failedLogin)
-	if err != nil {
-		http.Error(res, "Server Error", http.StatusInternalServerError)
-		return
-	}
-}
-
-func logout(res http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
-	delete(session.Values, "user")
-	store.Save(req, res, session)
-	http.Redirect(res, req, "/", http.StatusSeeOther)
-}
-
 func adminSite(res http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
-	if session.Values["user"] != "admin" {
-		http.Redirect(res, req, "/login", http.StatusSeeOther)
-		return
-	}
 	gotFile := false
 	if req.Method == "POST" {
 		file, _, err := req.FormFile("image")
@@ -140,6 +94,7 @@ func adminSite(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
 		return
 	}
+
 	err = tpl.Execute(res, gotFile)
 	if err != nil {
 		http.Error(res, "Server Error", http.StatusInternalServerError)
@@ -151,33 +106,11 @@ func getCSS(res http.ResponseWriter, req *http.Request) {
 	http.ServeFile(res, req, "style.css")
 }
 
-func toHTTPSHandler(res http.ResponseWriter, req *http.Request) {
-	changedURL := "https://" + req.Host[:len(req.Host)-1] + "1/" + req.URL.Path
-	http.Redirect(res, req, changedURL, http.StatusSeeOther)
-}
-
-func toHTTPHandler(res http.ResponseWriter, req *http.Request) {
-	changedURL := "http://" + req.Host[:len(req.Host)-1] + "0/" + req.URL.Path
-	http.Redirect(res, req, changedURL, http.StatusSeeOther)
-}
-
-func main() {
+func init() {
 	imagesHandler := http.StripPrefix("/images/", http.FileServer(http.Dir("images/")))
 
 	http.HandleFunc("/", mainSite)
-	http.HandleFunc("/admin", toHTTPSHandler)
+	http.HandleFunc("/admin", adminSite)
 	http.Handle("/images/", imagesHandler)
-	http.HandleFunc("/login", toHTTPSHandler)
-	http.HandleFunc("/logout", toHTTPSHandler)
 	http.HandleFunc("/style.css", getCSS)
-	go http.ListenAndServe(":9000", nil)
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", toHTTPHandler)
-	mux.HandleFunc("/admin/", adminSite)
-	mux.Handle("/images/", imagesHandler)
-	mux.HandleFunc("/login", login)
-	mux.HandleFunc("/logout", logout)
-	mux.HandleFunc("/style.css", getCSS)
-	http.ListenAndServeTLS(":9001", "cert.pem", "key.pem", mux)
 }
