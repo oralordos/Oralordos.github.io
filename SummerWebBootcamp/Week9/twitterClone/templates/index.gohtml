@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  {{if not .Logged}}
+  <button>Log In</button>
+  {{end}}
+  {{range .Tweets}}
+  <p>{{.Message}}</p>
+  <p>{{.SubmitTime}}</p>
+  {{end}}
+</body>
+</html>
