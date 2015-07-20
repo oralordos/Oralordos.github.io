@@ -6,7 +6,7 @@
 </head>
 <body>
   {{if not .Logged}}
-  <button>Log In</button>
+  <a href="{{.LoginURL}}">Log In</a>
   {{end}}
   {{range .Tweets}}
   <p>{{.Message}}</p>
