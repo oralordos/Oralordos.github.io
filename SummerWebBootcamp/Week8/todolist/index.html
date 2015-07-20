@@ -2,19 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <p id="test"></p>
-  <script>
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/todo.json');
-    xhr.addEventListener('readystatechange', function() {
-      if (xhr.readyState === 4) {
-        var data = JSON.parse(xhr.responseText);
-        document.querySelector('#test').textContent = data.Test;
-      }
-    });
-    xhr.send();
-  </script>
+  <section class="center-page">
+    <section id="todo-list"></section>
+    <form name="newitem">
+      <input type="text" name="itemtext" placeholder="Item text" required>
+      <input type="submit" value="Create Item">
+    </form>
+  </section>
+  <script src="script.js"></script>
 </body>
 </html>
