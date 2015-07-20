@@ -37,9 +37,17 @@ func getTweets(ctx context.Context, email string) ([]tweet, error) {
 		key := datastore.NewKey(ctx, "profile", email, 0, nil)
 		query = query.Ancestor(key)
 	}
+	query = query.Order("-SubmitTime")
 	_, err := query.GetAll(ctx, &t)
 	if err != nil {
 		return nil, err
 	}
 	return t, nil
+}
+
+func postTweet(ctx context.Context, t *tweet, email string) error {
+	profileKey := datastore.NewKey(ctx, "profile", email, 0, nil)
+	key := datastore.NewIncompleteKey(ctx, "Tweets", profileKey)
+	_, err := datastore.Put(ctx, key, t)
+	return err
 }

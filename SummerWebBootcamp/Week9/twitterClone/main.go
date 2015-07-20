@@ -17,7 +17,7 @@ type profile struct {
 }
 
 type tweet struct {
-	Message    []string
+	Message    string
 	SubmitTime time.Time
 }
 
@@ -93,6 +93,25 @@ func getProfile(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Server error!", http.StatusInternalServerError)
 		log.Errorf(ctx, "Get Profile Error: %s\n", username)
 		return
+	}
+
+	if req.Method == "POST" {
+		u := user.Current(ctx)
+		message := req.FormValue("message")
+		if p.Email != u.Email {
+			http.Error(res, "Unauthorized post", http.StatusUnauthorized)
+			return
+		}
+		t := tweet{
+			Message:    message,
+			SubmitTime: time.Now(),
+		}
+		err := postTweet(ctx, &t, u.Email)
+		if err != nil {
+			http.Error(res, "Server error!", http.StatusInternalServerError)
+			log.Errorf(ctx, "Put Tweet Error: %s\n", err.Error())
+			return
+		}
 	}
 
 	tweets, err := getTweets(ctx, p.Email)
