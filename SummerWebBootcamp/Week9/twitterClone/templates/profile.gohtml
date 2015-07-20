@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1>{{.Profile.Username}}</h1>
+  {{range .Tweets}}
+  <p>{{.}}</p>
+  {{end}}
+</body>
+</html>

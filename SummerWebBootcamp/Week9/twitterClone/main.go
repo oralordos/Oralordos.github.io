@@ -13,6 +13,7 @@ import (
 
 type profile struct {
 	Username string
+	Email    string
 }
 
 type tweet struct {
@@ -27,15 +28,24 @@ type mainpageData struct {
 	LoginURL string
 }
 
+type profileData struct {
+	Tweets  []tweet
+	Profile profile
+}
+
 var tpl = template.New("templates")
 
 func init() {
-	_, err := tpl.ParseFiles("templates/index.gohtml", "templates/createProfile.gohtml")
+	_, err := tpl.ParseFiles("templates/index.gohtml", "templates/createProfile.gohtml", "templates/profile.gohtml")
 	if err != nil {
 		panic(err)
 	}
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/CreateProfile", createProfile)
+}
+
+func confirmCreateProfile(username string) bool {
+	return len(username) > 5
 }
 
 func createProfile(res http.ResponseWriter, req *http.Request) {
@@ -44,11 +54,16 @@ func createProfile(res http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "POST" {
 		username := req.FormValue("username")
-		// TODO Confirm input is valid
+		if !confirmCreateProfile(username) {
+			http.Error(res, "Invalid input!", http.StatusBadRequest)
+			log.Warningf(ctx, "Invalid profile information from %s\n", req.RemoteAddr)
+			return
+		}
 		// TODO Make sure username is not taken
 		key := datastore.NewKey(ctx, "profile", u.Email, 0, nil)
 		p := profile{
 			Username: username,
+			Email:    u.Email,
 		}
 		_, err := datastore.Put(ctx, key, &p)
 		if err != nil {
@@ -65,9 +80,44 @@ func createProfile(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func getProfile(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
+
+	username := req.URL.Path[1:]
+
+	p, err := getProfileByUsername(ctx, username)
+	if err == datastore.ErrNoSuchEntity {
+		http.NotFound(res, req)
+		return
+	} else if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Get Profile Error: %s\n", username)
+		return
+	}
+
+	tweets, err := getTweets(ctx, p.Email)
+	if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Query Error: %s\n", err.Error())
+		return
+	}
+
+	pd := profileData{
+		Tweets:  tweets,
+		Profile: *p,
+	}
+
+	err = tpl.ExecuteTemplate(res, "profile.gohtml", pd)
+	if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Template Execute Error: %s\n", err.Error())
+		return
+	}
+}
+
 func handle(res http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/" {
-		http.NotFound(res, req)
+		getProfile(res, req)
 		return
 	}
 
@@ -75,9 +125,7 @@ func handle(res http.ResponseWriter, req *http.Request) {
 	u := user.Current(ctx)
 
 	if u != nil {
-		key := datastore.NewKey(ctx, "profile", u.Email, 0, nil)
-		var p profile
-		err := datastore.Get(ctx, key, &p)
+		_, err := getProfileByEmail(ctx, u.Email)
 		if err == datastore.ErrNoSuchEntity {
 			http.Redirect(res, req, "/CreateProfile", http.StatusSeeOther)
 			return
@@ -89,9 +137,7 @@ func handle(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// Get recent tweets
-	query := datastore.NewQuery("Tweets")
-	tweets := []tweet{}
-	_, err := query.GetAll(ctx, &tweets)
+	tweets, err := getTweets(ctx, "")
 	if err != nil {
 		http.Error(res, "Server error!", http.StatusInternalServerError)
 		log.Errorf(ctx, "Query Error: %s\n", err.Error())
