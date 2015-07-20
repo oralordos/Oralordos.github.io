@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <p id="test"></p>
+  <script>
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/todo.json');
+    xhr.addEventListener('readystatechange', function() {
+      if (xhr.readyState === 4) {
+        var data = JSON.parse(xhr.responseText);
+        document.querySelector('#test').textContent = data.Test;
+      }
+    });
+    xhr.send();
+  </script>
+</body>
+</html>
