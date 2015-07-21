@@ -8,18 +8,10 @@
 <body>
   <a href="/">Main Page</a>
   <button id="create">Create Tweet</button>
-  <h1>{{.Profile.Username}}</h1>
+  <h1>@{{.Profile.Username}}</h1>
   {{range .Tweets}}
   {{template "tweet" .}}
   {{end}}
-  <script>
-    document.querySelector('#create').addEventListener('click', function() {
-      var html = '<form id="createTweet" method="POST">' +
-        '<input type="text" name="message" placeholder="Message" required>' +
-        '<input type="submit">' +
-        '</form>';
-      document.body.innerHTML += html;
-    });
-  </script>
+  <script src="/public/makeTweet.js"></script>
 </body>
 </html>

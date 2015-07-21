@@ -2,6 +2,7 @@ package twitter
 
 import (
 	"html/template"
+	"io"
 	"net/http"
 	"time"
 
@@ -58,6 +59,7 @@ func init() {
 	http.HandleFunc("/CreateProfile", createProfile)
 	http.HandleFunc("/login", handleLogin)
 	http.HandleFunc("/logout", handleLogout)
+	http.HandleFunc("/tweet.json", handleTweet)
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
 }
 
@@ -65,6 +67,34 @@ func confirmCreateProfile(ctx context.Context, username string) bool {
 	_, err := getProfileByUsername(ctx, username)
 	return len(username) >= minUsernameSize && len(username) <= maxUsernameSize &&
 		err == datastore.ErrNoSuchEntity
+}
+
+func handleTweet(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
+	u := user.Current(ctx)
+	if req.Method != "POST" {
+		http.Error(res, "Unknown method", http.StatusMethodNotAllowed)
+		log.Warningf(ctx, "Incorrect method on tweet.json from %s", req.RemoteAddr)
+		return
+	}
+	buffer := make([]byte, 140)
+	n, err := req.Body.Read(buffer)
+	if err != nil && err != io.EOF {
+		http.Error(res, "Bad Request", http.StatusBadRequest)
+		log.Warningf(ctx, "Bad request: %s\n", err.Error())
+		return
+	}
+	msg := string(buffer[:n])
+	t := tweet{
+		Message:    msg,
+		SubmitTime: time.Now(),
+	}
+	err = postTweet(ctx, &t, u.Email)
+	if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Put Tweet Error: %s\n", err.Error())
+		return
+	}
 }
 
 func handleLogin(res http.ResponseWriter, req *http.Request) {
@@ -177,25 +207,6 @@ func getProfile(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Server error!", http.StatusInternalServerError)
 		log.Errorf(ctx, "Get Profile Error: %s\n", username)
 		return
-	}
-
-	if req.Method == "POST" {
-		u := user.Current(ctx)
-		message := req.FormValue("message")
-		if p.Email != u.Email {
-			http.Error(res, "Unauthorized post", http.StatusUnauthorized)
-			return
-		}
-		t := tweet{
-			Message:    message,
-			SubmitTime: time.Now(),
-		}
-		err := postTweet(ctx, &t, u.Email)
-		if err != nil {
-			http.Error(res, "Server error!", http.StatusInternalServerError)
-			log.Errorf(ctx, "Put Tweet Error: %s\n", err.Error())
-			return
-		}
 	}
 
 	tweets, err := getTweets(ctx, p.Email)
