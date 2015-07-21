@@ -11,6 +11,7 @@ document.querySelector('#create').addEventListener('click', function() {
   textInput = document.createElement('input');
   textInput.type = 'text';
   textInput.name = 'message';
+  textInput.setAttribute('maxlength', 140);
   textInput.placeholder = 'Message';
   textInput.setAttribute('required', 'true');
   textInput.addEventListener('input', function() {

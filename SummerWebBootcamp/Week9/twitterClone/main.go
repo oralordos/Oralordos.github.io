@@ -15,8 +15,9 @@ import (
 )
 
 type profile struct {
-	Username string
-	Email    string
+	Username  string
+	Email     string
+	Following []string
 }
 
 type tweet struct {
@@ -32,8 +33,9 @@ type mainpageData struct {
 }
 
 type profileData struct {
-	Tweets  []tweet
-	Profile profile
+	Tweets      []tweet
+	Profile     profile
+	CurrentUser string
 }
 
 type loginData struct {
@@ -44,6 +46,7 @@ type loginData struct {
 const (
 	minUsernameSize = 5
 	maxUsernameSize = 20
+	tweetSize       = 140
 	loginDuration   = 60 * 60 * 24 // 1 Day
 )
 
@@ -56,11 +59,31 @@ func init() {
 	}
 	http.HandleFunc("/", handle)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
-	http.HandleFunc("/CreateProfile", createProfile)
+	http.HandleFunc("/CreateProfile", handleCreateProfile)
 	http.HandleFunc("/login", handleLogin)
 	http.HandleFunc("/logout", handleLogout)
 	http.HandleFunc("/tweet.json", handleTweet)
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
+}
+
+func getCurrentUser(req *http.Request) *profile {
+	ctx := appengine.NewContext(req)
+	u := user.Current(ctx)
+	if u == nil {
+		return nil
+	}
+	c, err := req.Cookie("login")
+	if err != nil {
+		return nil
+	}
+	p, err := getProfileByUsername(ctx, c.Value)
+	if err != nil {
+		return nil
+	}
+	if p.Email != u.Email {
+		return nil
+	}
+	return p
 }
 
 func confirmCreateProfile(ctx context.Context, username string) bool {
@@ -71,13 +94,18 @@ func confirmCreateProfile(ctx context.Context, username string) bool {
 
 func handleTweet(res http.ResponseWriter, req *http.Request) {
 	ctx := appengine.NewContext(req)
-	u := user.Current(ctx)
+	u := getCurrentUser(req)
+	if u == nil {
+		http.Error(res, "Incorrect login", http.StatusUnauthorized)
+		log.Warningf(ctx, "Incorrect login from: %s\n", req.RemoteAddr)
+		return
+	}
 	if req.Method != "POST" {
 		http.Error(res, "Unknown method", http.StatusMethodNotAllowed)
 		log.Warningf(ctx, "Incorrect method on tweet.json from %s", req.RemoteAddr)
 		return
 	}
-	buffer := make([]byte, 140)
+	buffer := make([]byte, tweetSize)
 	n, err := req.Body.Read(buffer)
 	if err != nil && err != io.EOF {
 		http.Error(res, "Bad Request", http.StatusBadRequest)
@@ -151,7 +179,7 @@ func handleLogout(res http.ResponseWriter, req *http.Request) {
 	http.Redirect(res, req, "/", http.StatusSeeOther)
 }
 
-func createProfile(res http.ResponseWriter, req *http.Request) {
+func handleCreateProfile(res http.ResponseWriter, req *http.Request) {
 	ctx := appengine.NewContext(req)
 	u := user.Current(ctx)
 
@@ -162,13 +190,8 @@ func createProfile(res http.ResponseWriter, req *http.Request) {
 			log.Warningf(ctx, "Invalid profile information from %s\n", req.RemoteAddr)
 			return
 		}
-		key := datastore.NewKey(ctx, "profile", u.Email, 0, nil)
-		p := profile{
-			Username: username,
-			Email:    u.Email,
-		}
+		err := createProfile(ctx, username, u.Email)
 		http.SetCookie(res, &http.Cookie{Name: "login", Value: username, MaxAge: loginDuration})
-		_, err := datastore.Put(ctx, key, &p)
 		if err != nil {
 			http.Error(res, "Server error!", http.StatusInternalServerError)
 			log.Errorf(ctx, "Create profile Error: %s\n", err.Error())
@@ -220,6 +243,19 @@ func getProfile(res http.ResponseWriter, req *http.Request) {
 		Tweets:  tweets,
 		Profile: *p,
 	}
+	u := getCurrentUser(req)
+	if u != nil {
+		pd.CurrentUser = u.Username
+	}
+
+	if req.URL.Query().Get("f") == "y" {
+		err := addFollower(ctx, u, username)
+		if err != nil {
+			http.Error(res, "Unable to save follower", http.StatusInternalServerError)
+			log.Errorf(ctx, "Save followed: %s\n", err.Error())
+			return
+		}
+	}
 
 	err = tpl.ExecuteTemplate(res, "profile.gohtml", pd)
 	if err != nil {
@@ -236,7 +272,7 @@ func handle(res http.ResponseWriter, req *http.Request) {
 	}
 
 	ctx := appengine.NewContext(req)
-	u := user.Current(ctx)
+	u := getCurrentUser(req)
 
 	if u != nil {
 		_, err := getProfileByEmail(ctx, u.Email)
@@ -251,7 +287,14 @@ func handle(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// Get recent tweets
-	tweets, err := getTweets(ctx, "")
+	var tweets []tweet
+	var err error
+	if u == nil {
+		tweets, err = getTweets(ctx, "")
+	} else {
+		tweets, err = getMultiTweets(ctx, u.Following)
+	}
+
 	if err != nil {
 		http.Error(res, "Server error!", http.StatusInternalServerError)
 		log.Errorf(ctx, "Query Error: %s\n", err.Error())

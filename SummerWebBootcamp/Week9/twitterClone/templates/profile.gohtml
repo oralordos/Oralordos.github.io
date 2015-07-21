@@ -7,11 +7,19 @@
 </head>
 <body>
   <a href="/">Main Page</a>
+  {{if eq .CurrentUser .Profile.Username}}
   <button id="create">Create Tweet</button>
+  {{else if .CurrentUser}}
+  <a href="/{{.Profile.Username}}?f=y">Follow</a>
+  {{else}}
+  <a href="/login">Login</a>
+  {{end}}
   <h1>@{{.Profile.Username}}</h1>
   {{range .Tweets}}
   {{template "tweet" .}}
   {{end}}
+  {{if eq .CurrentUser .Profile.Username}}
   <script src="/public/makeTweet.js"></script>
+  {{end}}
 </body>
 </html>

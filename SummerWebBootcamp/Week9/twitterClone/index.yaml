@@ -14,9 +14,4 @@ indexes:
   ancestor: yes
   properties:
   - name: SubmitTime
-
-- kind: Tweets
-  ancestor: yes
-  properties:
-  - name: SubmitTime
     direction: desc
