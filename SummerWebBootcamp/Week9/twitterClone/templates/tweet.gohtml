@@ -1,4 +1,7 @@
 {{define "tweet"}}
-<p>{{.Message}}</p>
-<p class="submit-time">{{.SubmitTime}}</p>
+<div class="tweet">
+  <a href="/{{.Username}}">@{{.Username}}</a>
+  <p>{{.Message}}</p>
+  <p class="submit-time">{{.SubmitTime}}</p>
+</div>
 {{end}}

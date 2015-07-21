@@ -38,9 +38,16 @@ func getTweets(ctx context.Context, email string) ([]tweet, error) {
 		query = query.Ancestor(key)
 	}
 	query = query.Order("-SubmitTime")
-	_, err := query.GetAll(ctx, &t)
+	keys, err := query.GetAll(ctx, &t)
 	if err != nil {
 		return nil, err
+	}
+	for i := range t {
+		p, err := getProfileByEmail(ctx, keys[i].Parent().StringID())
+		if err != nil {
+			return nil, err
+		}
+		t[i].Username = p.Username
 	}
 	return t, nil
 }

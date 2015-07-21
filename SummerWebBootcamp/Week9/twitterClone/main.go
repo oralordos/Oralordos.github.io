@@ -19,6 +19,7 @@ type profile struct {
 }
 
 type tweet struct {
+	Username   string `datastore:"-"`
 	Message    string
 	SubmitTime time.Time
 }
