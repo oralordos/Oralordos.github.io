@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Twitter Clone</title>
+  <link rel="stylesheet" href="/public/style.css">
 </head>
 <body>
-  {{if not .Logged}}
-  <a href="{{.LoginURL}}">Log In</a>
+  {{if .Logged}}
+  <a href="/{{.Username}}">Profile</a>
+  <a href="/logout">Logout</a>
+  {{else}}
+  <a href="/login">Log In</a>
   {{end}}
   {{range .Tweets}}
-  <p>{{.Message}}</p>
-  <p>{{.SubmitTime}}</p>
+  {{template "tweet" .}}
   {{end}}
 </body>
 </html>

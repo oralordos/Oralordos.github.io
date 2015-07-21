@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"golang.org/x/net/context"
+
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/datastore"
 	"google.golang.org/appengine/log"
@@ -24,8 +26,7 @@ type tweet struct {
 type mainpageData struct {
 	Tweets   []tweet
 	Logged   bool
-	Email    string
-	LoginURL string
+	Username string
 }
 
 type profileData struct {
@@ -33,19 +34,90 @@ type profileData struct {
 	Profile profile
 }
 
+type loginData struct {
+	ErrorMessage string
+	Username     string
+}
+
+const (
+	minUsernameSize = 5
+	maxUsernameSize = 20
+	loginDuration   = 60 * 60 * 24 // 1 Day
+)
+
 var tpl = template.New("templates")
 
 func init() {
-	_, err := tpl.ParseFiles("templates/index.gohtml", "templates/createProfile.gohtml", "templates/profile.gohtml")
+	_, err := tpl.ParseGlob("templates/*.gohtml")
 	if err != nil {
 		panic(err)
 	}
 	http.HandleFunc("/", handle)
+	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.HandleFunc("/CreateProfile", createProfile)
+	http.HandleFunc("/login", handleLogin)
+	http.HandleFunc("/logout", handleLogout)
+	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
 }
 
-func confirmCreateProfile(username string) bool {
-	return len(username) > 5
+func confirmCreateProfile(ctx context.Context, username string) bool {
+	_, err := getProfileByUsername(ctx, username)
+	return len(username) >= minUsernameSize && len(username) <= maxUsernameSize &&
+		err == datastore.ErrNoSuchEntity
+}
+
+func handleLogin(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
+	u := user.Current(ctx)
+
+	cookie, err := req.Cookie("login")
+	if err != http.ErrNoCookie {
+		http.Redirect(res, req, "/"+cookie.Value, http.StatusSeeOther)
+		return
+	}
+
+	currentProfile, err := getProfileByEmail(ctx, u.Email)
+	if err == datastore.ErrNoSuchEntity {
+		http.Redirect(res, req, "/CreateProfile", http.StatusSeeOther)
+		return
+	} else if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Get profile error: %s\n", err.Error())
+		return
+	}
+
+	login := loginData{
+		Username: currentProfile.Username,
+	}
+	if req.Method == "POST" {
+		username := req.FormValue("username")
+		p, err := getProfileByUsername(ctx, username)
+		if err != nil {
+			login.ErrorMessage = "No such username"
+		} else if p.Email != u.Email {
+			login.ErrorMessage = "Not your profile"
+		} else {
+			c := http.Cookie{
+				Name:   "login",
+				Value:  username,
+				MaxAge: loginDuration,
+			}
+			http.SetCookie(res, &c)
+			http.Redirect(res, req, "/"+username, http.StatusSeeOther)
+			return
+		}
+	}
+	err = tpl.ExecuteTemplate(res, "login.gohtml", login)
+	if err != nil {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Template Execute Error: %s\n", err.Error())
+		return
+	}
+}
+
+func handleLogout(res http.ResponseWriter, req *http.Request) {
+	http.SetCookie(res, &http.Cookie{Name: "login", MaxAge: -1})
+	http.Redirect(res, req, "/", http.StatusSeeOther)
 }
 
 func createProfile(res http.ResponseWriter, req *http.Request) {
@@ -54,17 +126,17 @@ func createProfile(res http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "POST" {
 		username := req.FormValue("username")
-		if !confirmCreateProfile(username) {
+		if !confirmCreateProfile(ctx, username) {
 			http.Error(res, "Invalid input!", http.StatusBadRequest)
 			log.Warningf(ctx, "Invalid profile information from %s\n", req.RemoteAddr)
 			return
 		}
-		// TODO Make sure username is not taken
 		key := datastore.NewKey(ctx, "profile", u.Email, 0, nil)
 		p := profile{
 			Username: username,
 			Email:    u.Email,
 		}
+		http.SetCookie(res, &http.Cookie{Name: "login", Value: username, MaxAge: loginDuration})
 		_, err := datastore.Put(ctx, key, &p)
 		if err != nil {
 			http.Error(res, "Server error!", http.StatusInternalServerError)
@@ -72,7 +144,18 @@ func createProfile(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 	}
-	err := tpl.ExecuteTemplate(res, "createProfile.gohtml", nil)
+
+	_, err := getProfileByEmail(ctx, u.Email)
+	if err == nil {
+		http.Redirect(res, req, "login", http.StatusSeeOther)
+		return
+	} else if err != datastore.ErrNoSuchEntity {
+		http.Error(res, "Server error!", http.StatusInternalServerError)
+		log.Errorf(ctx, "Get profile Error: %s\n", err.Error())
+		return
+	}
+
+	err = tpl.ExecuteTemplate(res, "createProfile.gohtml", nil)
 	if err != nil {
 		http.Error(res, "Server error!", http.StatusInternalServerError)
 		log.Errorf(ctx, "Template Execute Error: %s\n", err.Error())
@@ -164,19 +247,16 @@ func handle(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// Create template
-	loginURL, err := user.LoginURL(ctx, "/")
-	if err != nil {
-		http.Error(res, "Server error!", http.StatusInternalServerError)
-		log.Errorf(ctx, "Login URL Error: %s\n", err.Error())
-		return
-	}
 	data := mainpageData{
-		Tweets:   tweets,
-		Logged:   u != nil,
-		LoginURL: loginURL,
+		Tweets: tweets,
 	}
-	if data.Logged {
-		data.Email = u.Email
+
+	c, err := req.Cookie("login")
+	if err == nil {
+		data.Logged = true
+		data.Username = c.Value
+	} else {
+		data.Logged = false
 	}
 
 	err = tpl.ExecuteTemplate(res, "index.gohtml", data)

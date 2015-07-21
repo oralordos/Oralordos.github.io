@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Twitter Clone: {{.Profile.Username}}'s Profile</title>
+  <link rel="stylesheet" href="/public/style.css">
 </head>
 <body>
+  <a href="/">Main Page</a>
   <button id="create">Create Tweet</button>
   <h1>{{.Profile.Username}}</h1>
   {{range .Tweets}}
-  <p>{{.Message}}</p>
-  <p>{{.SubmitTime}}</p>
+  {{template "tweet" .}}
   {{end}}
   <script>
     document.querySelector('#create').addEventListener('click', function() {
