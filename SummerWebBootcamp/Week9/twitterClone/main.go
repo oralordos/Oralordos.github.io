@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"io"
 	"net/http"
+	"net/mail"
 	"time"
 
 	"golang.org/x/net/context"
@@ -36,6 +37,7 @@ type profileData struct {
 	Tweets      []tweet
 	Profile     profile
 	CurrentUser string
+	Following   bool
 }
 
 type loginData struct {
@@ -63,6 +65,7 @@ func init() {
 	http.HandleFunc("/login", handleLogin)
 	http.HandleFunc("/logout", handleLogout)
 	http.HandleFunc("/tweet.json", handleTweet)
+	http.HandleFunc("/_ah/mail/", incomingMail)
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
 }
 
@@ -92,6 +95,44 @@ func confirmCreateProfile(ctx context.Context, username string) bool {
 		err == datastore.ErrNoSuchEntity
 }
 
+func incomingMail(res http.ResponseWriter, req *http.Request) {
+	ctx := appengine.NewContext(req)
+	defer req.Body.Close()
+	msg, err := mail.ReadMessage(req.Body)
+	if err != nil {
+		log.Errorf(ctx, "Email error: %s\n", err.Error())
+		return
+	}
+	addresses, err := msg.Header.AddressList("From")
+	if err != nil {
+		log.Errorf(ctx, "Email error: %s\n", err.Error())
+		return
+	}
+	addr := addresses[0]
+	p, err := getProfileByEmail(ctx, addr.Address)
+	if err != nil {
+		log.Errorf(ctx, "Email error: %s\n", err.Error())
+		return
+	}
+
+	contentType := msg.Header.Get("Content-Type")
+	text, err := parseFile(ctx, contentType, "", msg.Body)
+	if err != nil {
+		log.Errorf(ctx, "Email error: %s\n", err.Error())
+		return
+	}
+	t := &tweet{
+		Message:    text,
+		SubmitTime: time.Now(),
+		Username:   p.Username,
+	}
+	err = postTweet(ctx, t, addr.Address)
+	if err != nil {
+		log.Errorf(ctx, "Email error: %s\n", err.Error())
+		return
+	}
+}
+
 func handleTweet(res http.ResponseWriter, req *http.Request) {
 	ctx := appengine.NewContext(req)
 	u := getCurrentUser(req)
@@ -114,6 +155,7 @@ func handleTweet(res http.ResponseWriter, req *http.Request) {
 	}
 	msg := string(buffer[:n])
 	t := tweet{
+		Username:   u.Username,
 		Message:    msg,
 		SubmitTime: time.Now(),
 	}
@@ -246,6 +288,7 @@ func getProfile(res http.ResponseWriter, req *http.Request) {
 	u := getCurrentUser(req)
 	if u != nil {
 		pd.CurrentUser = u.Username
+		pd.Following = itemIn(username, u.Following)
 	}
 
 	if req.URL.Query().Get("f") == "y" {

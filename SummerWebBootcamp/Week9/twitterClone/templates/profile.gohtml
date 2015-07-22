@@ -7,10 +7,18 @@
 </head>
 <body>
   <a href="/">Main Page</a>
+  {{if .CurrentUser}}
+    <a href="/{{.Profile.Username}}/followers">Followers</a>
+    <a href="/{{.Profile.Username}}/following">Following</a>
+  {{end}}
   {{if eq .CurrentUser .Profile.Username}}
   <button id="create">Create Tweet</button>
   {{else if .CurrentUser}}
-  <a href="/{{.Profile.Username}}?f=y">Follow</a>
+    {{if .Following}}
+      <a href="?f=n">Unfollow</a>
+    {{else}}
+      <a href="?f=y">Follow</a>
+    {{end}}
   {{else}}
   <a href="/login">Login</a>
   {{end}}
