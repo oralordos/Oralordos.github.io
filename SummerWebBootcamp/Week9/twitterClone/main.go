@@ -66,7 +66,6 @@ func init() {
 	http.HandleFunc("/logout", handleLogout)
 	http.HandleFunc("/tweet.json", handleTweet)
 	http.HandleFunc("/_ah/mail/", incomingMail)
-	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
 }
 
 func getCurrentUser(req *http.Request) *profile {
