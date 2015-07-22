@@ -290,11 +290,19 @@ func getProfile(res http.ResponseWriter, req *http.Request) {
 		pd.Following = itemIn(username, u.Following)
 	}
 
-	if req.URL.Query().Get("f") == "y" {
+	isFollower := req.URL.Query().Get("f")
+	if isFollower == "y" {
 		err := addFollower(ctx, u, username)
 		if err != nil {
-			http.Error(res, "Unable to save follower", http.StatusInternalServerError)
-			log.Errorf(ctx, "Save followed: %s\n", err.Error())
+			http.Error(res, "Unable to remove follower", http.StatusInternalServerError)
+			log.Errorf(ctx, "Save add followed: %s\n", err.Error())
+			return
+		}
+	} else if isFollower == "n" {
+		err := removeFollower(ctx, u, username)
+		if err != nil {
+			http.Error(res, "Unable to remove follower", http.StatusInternalServerError)
+			log.Errorf(ctx, "Save remove followed: %s\n", err.Error())
 			return
 		}
 	}

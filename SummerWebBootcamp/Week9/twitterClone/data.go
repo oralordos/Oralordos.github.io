@@ -143,3 +143,20 @@ func addFollower(ctx context.Context, currentUser *profile, newFollowed string) 
 	_, err := datastore.Put(ctx, key, currentUser)
 	return err
 }
+
+func removeFollower(ctx context.Context, currentUser *profile, oldFollowed string) error {
+	needsStore := false
+	for i, f := range currentUser.Following {
+		if f == oldFollowed {
+			currentUser.Following = append(currentUser.Following[:i], currentUser.Following[i+1:]...)
+			needsStore = true
+			break
+		}
+	}
+	if !needsStore {
+		return nil
+	}
+	key := datastore.NewKey(ctx, "profile", currentUser.Email, 0, nil)
+	_, err := datastore.Put(ctx, key, currentUser)
+	return err
+}
