@@ -12,7 +12,6 @@ import (
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/channel"
 	"google.golang.org/appengine/datastore"
-	"google.golang.org/appengine/log"
 	"google.golang.org/appengine/user"
 )
 
@@ -71,26 +70,6 @@ func getClientID(email string) string {
 	return hex.EncodeToString(sum)
 }
 
-func connectClient(res http.ResponseWriter, req *http.Request) {
-	ctx := appengine.NewContext(req)
-	clientID := req.FormValue("from")
-	err := saveNewConnection(ctx, clientID)
-	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-func disconnectClient(res http.ResponseWriter, req *http.Request) {
-	ctx := appengine.NewContext(req)
-	clientID := req.FormValue("from")
-	err := removeConnection(ctx, clientID)
-	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
 func saveNewConnection(ctx context.Context, clientID string) error {
 	key := datastore.NewKey(ctx, "connection", clientID, 0, nil)
 	val := struct{ Value string }{clientID}
@@ -98,17 +77,15 @@ func saveNewConnection(ctx context.Context, clientID string) error {
 	return err
 }
 
-func removeConnection(ctx context.Context, clientID string) error {
-	key := datastore.NewKey(ctx, "connection", clientID, 0, nil)
-	return datastore.Delete(ctx, key)
-}
-
 func (api *API) handlePostChannel(res http.ResponseWriter, req *http.Request) error {
 	ctx := appengine.NewContext(req)
 	u := user.Current(ctx)
 	clientID := getClientID(u.Email)
 	token, err := channel.Create(ctx, clientID)
-	saveNewConnection(ctx, clientID)
+	if err != nil {
+		return err
+	}
+	err = saveNewConnection(ctx, clientID)
 	if err != nil {
 		return err
 	}
@@ -123,7 +100,6 @@ func (api *API) handlePostMessage(res http.ResponseWriter, req *http.Request) er
 	if err != nil {
 		return err
 	}
-	log.Debugf(ctx, "The message is: %s\n", message.Text)
 
 	query := datastore.NewQuery("connection")
 	it := query.Run(ctx)
@@ -135,7 +111,6 @@ func (api *API) handlePostMessage(res http.ResponseWriter, req *http.Request) er
 		} else if err != nil {
 			return err
 		}
-		log.Debugf(ctx, "The client ID is: %s\n", conn.Value)
 		err = channel.SendJSON(ctx, conn.Value, message)
 		if err != nil {
 			return err
