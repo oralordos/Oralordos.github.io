@@ -59,10 +59,6 @@ func (api *API) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-type connection struct {
-	Value string
-}
-
 func getClientID(email string) string {
 	hash := md5.New()
 	io.WriteString(hash, email)
