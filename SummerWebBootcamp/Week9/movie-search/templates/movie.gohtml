@@ -1,0 +1,9 @@
+{{define "movieItem"}}
+<a href="/{{.URL}}">{{.Name}}</a>
+{{end}}
+
+{{define "movieDetails"}}
+<img src="{{.ImageURL}}" alt="{{.Name}}">
+<h2>{{.Name}}</h2>
+<p>{{.Summary}}</p>
+{{end}}
