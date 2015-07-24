@@ -1,18 +1,21 @@
 package search
 
 import (
+	"io/ioutil"
 	"net/http"
 	"strings"
 
+	"golang.org/x/net/context"
+
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
+	"google.golang.org/appengine/urlfetch"
 )
 
 type movie struct {
-	Name     string
-	URL      string
-	Summary  string
-	ImageURL string
+	Name    string
+	URL     string
+	Summary string
 }
 
 func handleAdd(res http.ResponseWriter, req *http.Request) {
@@ -21,14 +24,17 @@ func handleAdd(res http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "POST" {
 		name := strings.TrimSpace(req.FormValue("name"))
-		summary := req.FormValue("summary")
-		imageURL := req.FormValue("imageURL")
+		summary, err := getHTML(ctx, req.FormValue("summary"))
+		if err != nil {
+			http.Error(res, "Server error", http.StatusInternalServerError)
+			log.Errorf(ctx, "%v\n", err)
+			return
+		}
 
 		mov := &movie{
-			Name:     name,
-			Summary:  summary,
-			URL:      strings.ToLower(strings.Replace(name, " ", "", -1)),
-			ImageURL: imageURL,
+			Name:    name,
+			Summary: summary,
+			URL:     strings.ToLower(strings.Replace(name, " ", "", -1)),
 		}
 		err = addMovie(ctx, mov)
 		if err != nil {
@@ -46,4 +52,15 @@ func handleAdd(res http.ResponseWriter, req *http.Request) {
 		log.Errorf(ctx, "%v\n", err)
 		return
 	}
+}
+
+func getHTML(ctx context.Context, markdown string) (string, error) {
+	client := urlfetch.Client(ctx)
+	resp, err := client.Post("https://api.github.com/markdown/raw", "text/plain", strings.NewReader(markdown))
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	bts, err := ioutil.ReadAll(resp.Body)
+	return string(bts), err
 }

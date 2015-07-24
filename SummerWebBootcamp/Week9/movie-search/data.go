@@ -1,6 +1,8 @@
 package search
 
 import (
+	"html/template"
+
 	"golang.org/x/net/context"
 	"google.golang.org/appengine/datastore"
 )
@@ -21,9 +23,15 @@ func addMovie(ctx context.Context, mov *movie) error {
 	return addToIndex(ctx, mov)
 }
 
-func getMovie(ctx context.Context, URL string) (*movie, error) {
+type templateMovie struct {
+	Name    string
+	URL     string
+	Summary template.HTML
+}
+
+func getMovie(ctx context.Context, URL string) (*templateMovie, error) {
 	key := datastore.NewKey(ctx, "Movie", URL, 0, nil)
-	var mov movie
+	var mov templateMovie
 	err := datastore.Get(ctx, key, &mov)
 	return &mov, err
 }
