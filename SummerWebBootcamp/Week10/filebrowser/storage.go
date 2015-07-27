@@ -1,6 +1,7 @@
 package browser
 
 import (
+	"io"
 	"net/http"
 	"strings"
 
@@ -61,4 +62,8 @@ func listFiles(cctx context.Context, bucket, path string) ([]file, error) {
 		files = append(files, f)
 	}
 	return files, nil
+}
+
+func getFile(cctx context.Context, bucket, path string) (io.ReadCloser, error) {
+	return storage.NewReader(cctx, bucket, path)
 }
