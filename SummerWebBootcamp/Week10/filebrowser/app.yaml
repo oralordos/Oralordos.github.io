@@ -1,4 +1,4 @@
-application: astute-curve-100822
+application: xenon-petal-100822
 version: browser
 runtime: go
 api_version: go1
