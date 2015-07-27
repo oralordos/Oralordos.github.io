@@ -9,12 +9,11 @@
   <h2>Bucket: {{.Bucket}}</h2>
   <section class="filebrowser">
     <p class="filepath">{{.Path}}</p>
-    {{range .Files}}
-    {{if .IsFolder}}
-    <a class="folder" href="{{.URL}}">{{.Filename}}</a>
-    {{else}}
-    <a class="file" href="{{.URL}}">{{.Filename}}</a>
+    {{range .Subfolders}}
+    <a class="folder" href="{{.}}">{{.}}</a>
     {{end}}
+    {{range .Files}}
+    <a class="file" href="{{.}}">{{.}}</a>
     {{end}}
   </section>
   <section class="upload">

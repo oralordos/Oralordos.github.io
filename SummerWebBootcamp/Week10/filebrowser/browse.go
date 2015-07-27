@@ -12,9 +12,10 @@ import (
 )
 
 type browseModel struct {
-	Path   string
-	Bucket string
-	Files  []file
+	Path       string
+	Bucket     string
+	Subfolders []string
+	Files      []string
 }
 
 func handlePath(res http.ResponseWriter, req *http.Request, p httprouter.Params) {
@@ -45,16 +46,17 @@ func handlePath(res http.ResponseWriter, req *http.Request, p httprouter.Params)
 		defer f.Close()
 		io.Copy(res, f)
 	} else {
-		files, err := listFiles(cctx, s.Bucket, path[1:])
+		files, subfolders, err := listFiles(cctx, s.Bucket, path[1:])
 		if err != nil {
 			http.Error(res, "Server Error", http.StatusInternalServerError)
 			log.Errorf(ctx, err.Error())
 			return
 		}
 		data := browseModel{
-			Path:   path,
-			Bucket: s.Bucket,
-			Files:  files,
+			Path:       path,
+			Bucket:     s.Bucket,
+			Subfolders: subfolders,
+			Files:      files,
 		}
 		err = tpl.ExecuteTemplate(res, "browse", data)
 		if err != nil {

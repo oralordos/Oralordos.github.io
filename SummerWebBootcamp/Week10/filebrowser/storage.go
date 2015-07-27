@@ -43,25 +43,24 @@ func getCloudContext(aeCtx context.Context, credentials string) (context.Context
 	return cloud.NewContext(appengine.AppID(aeCtx), hc), nil
 }
 
-func listFiles(cctx context.Context, bucket, path string) ([]file, error) {
+func listFiles(cctx context.Context, bucket, path string) ([]string, []string, error) {
 	q := &storage.Query{
 		Delimiter: delimiter,
 		Prefix:    path,
 	}
 	objs, err := storage.ListObjects(cctx, bucket, q)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	files := []file{}
+	subfolders := []string{}
+	for _, v := range objs.Prefixes {
+		subfolders = append(subfolders, strings.TrimPrefix(v, path))
+	}
+	files := []string{}
 	for _, v := range objs.Results {
-		f := file{
-			URL:      v.Name,
-			Filename: v.Name,
-			IsFolder: strings.HasSuffix(v.Name, delimiter),
-		}
-		files = append(files, f)
+		files = append(files, v.Name)
 	}
-	return files, nil
+	return files, subfolders, nil
 }
 
 func getFile(cctx context.Context, bucket, path string) (io.ReadCloser, error) {
