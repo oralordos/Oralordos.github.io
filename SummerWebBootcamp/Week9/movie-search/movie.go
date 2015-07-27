@@ -9,13 +9,14 @@ import (
 
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
+	"google.golang.org/appengine/search"
 	"google.golang.org/appengine/urlfetch"
 )
 
 type movie struct {
 	Name    string
 	URL     string
-	Summary string
+	Summary search.HTML
 }
 
 func handleAdd(res http.ResponseWriter, req *http.Request) {
@@ -54,7 +55,7 @@ func handleAdd(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func getHTML(ctx context.Context, markdown string) (string, error) {
+func getHTML(ctx context.Context, markdown string) (search.HTML, error) {
 	client := urlfetch.Client(ctx)
 	resp, err := client.Post("https://api.github.com/markdown/raw", "text/plain", strings.NewReader(markdown))
 	if err != nil {
@@ -62,5 +63,5 @@ func getHTML(ctx context.Context, markdown string) (string, error) {
 	}
 	defer resp.Body.Close()
 	bts, err := ioutil.ReadAll(resp.Body)
-	return string(bts), err
+	return search.HTML(bts), err
 }
